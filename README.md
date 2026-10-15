@@ -16,6 +16,10 @@ This project documents my practical experience deploying Pi-hole on a Raspberry 
 
 Raspberry Pi, Linux, DNS, network troubleshooting, and technical documentation.
 
+## Case studies
+
+- [Smart TV DNS investigation — October 15, 2026](case-studies/smart-tv-dns-investigation-2026-10-15.md): attributed repeated DNS queries to a smart TV through a controlled unplug/reconnect test and documented limitations.
+
 ## Documentation roadmap
 
 - [ ] Add a project overview diagram.
