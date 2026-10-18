@@ -16,15 +16,32 @@ This project documents my practical experience deploying Pi-hole on a Raspberry 
 
 Raspberry Pi, Linux, DNS, network troubleshooting, and technical documentation.
 
+## Logical DNS flow
+
+This is a **scoped conceptual diagram**, not a complete physical network map. The TV-to-Pi-hole link reflects the client attribution documented in the October 15 investigation. The downstream branches illustrate possible DNS filtering behavior; the actual upstream DNS configuration and individual response outcomes are not yet documented.
+
+```mermaid
+flowchart LR
+    TV["Insignia smart TV (identified client)"] -->|"DNS queries observed"| PH["Pi-hole on Raspberry Pi 400"]
+    PH -.->|"Upstream settings to verify"| UP["Upstream DNS resolver"]
+    PH -->|"When a blocking rule matches"| BLOCK["DNS block response"]
+```
+
+Other household clients and potential alternate DNS paths are not inventoried in this diagram.
+
 ## Case studies
 
 - [Smart TV DNS investigation — October 15, 2026](case-studies/smart-tv-dns-investigation-2026-10-15.md): attributed repeated DNS queries to a smart TV through a controlled unplug/reconnect test and documented limitations.
 
+## Evidence collection
+
+- [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a reusable template for time-stamped observations and privacy-safe validation. **This is a plan, not new test evidence.**
+
 ## Documentation roadmap
 
-- [ ] Add a project overview diagram.
+- [x] Add a scoped logical DNS-flow diagram (not a full network topology).
 - [ ] Document software versions.
-- [ ] Add sanitized examples and test results.
+- [ ] Add sanitized examples, time-stamped observations, and test results.
 - [ ] Record lessons learned.
 
 These items are planned documentation, not completed validation results. No blocking rate or measured security improvement is claimed.
