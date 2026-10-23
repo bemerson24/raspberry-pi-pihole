@@ -27,6 +27,12 @@ An unexpectedly active client appeared in Pi-hole's DNS-query telemetry. The pur
 - **Pi-hole dashboard:** The supplied 24-hour-style graphs showed network-wide query activity falling after midnight and increasing again in the early morning. These graphs aggregate multiple clients and do not isolate the target client's contribution.
 - **Timing limitation:** The exact time the router block was applied and a matched per-client before/after query count were not captured in the supplied evidence.
 
+### Subsequent comparison — October 23
+
+- **Router-block follow-up:** After applying the router-level block, the previously observed Minerva-associated requests were no longer seen in Pi-hole during the user's subsequent review. This is an observation about Pi-hole-visible DNS activity, not a packet capture of all device traffic.
+- **Additional television:** An older television was added to the network around the same time, then secured and updated; it remained online and in use.
+- **Aggregate activity:** Despite the additional television, the user's subsequent review of the Pi-hole dashboard showed overall network-wide activity remained substantially below the earlier level. The dashboard view was aggregate; no matched per-client counts or equal-length before/after windows were recorded.
+
 ### Interpretation
 
 The ping output is consistent with the target being unreachable from the laptop during the test. It does not by itself distinguish a router access-control effect from a powered-off device, a disconnected client, or another local network condition.
@@ -35,7 +41,11 @@ The Minerva-related DNS lookups indicate that Pi-hole observed DNS requests for 
 
 The current evidence does not independently establish that the router-isolation target is the same physical device as the Insignia TV from the October 15 test. A private comparison of the target's MAC address against the TV's network settings would help resolve that question.
 
-No service-impact observations, packet capture, or application-layer traffic analysis have been recorded for this follow-up.
+The lower aggregate activity, disappearance of the previously observed Minerva-associated requests from Pi-hole, and continued presence of another active television are consistent with the blocked client having accounted for a substantial share of the earlier DNS-query volume. They do not isolate causation: the router block and addition of the older TV occurred around the same time, activity varies with time and use, and the available graphs are network-wide rather than client-specific. A router rule can also prevent requests from reaching Pi-hole, so the absence of logged DNS queries does not prove that the device stopped attempting communication or that all outbound traffic ceased.
+
+The user reported that internet access and TV viewing continued during the block. The exact playback device and whether the blocked TV could initiate new playback while blocked were not independently captured; continued playback alone cannot distinguish a separate streaming client, an existing session, or buffered content.
+
+No formal service-impact measurements, packet capture, or application-layer traffic analysis have been recorded for this follow-up.
 
 ## Reproducible validation approach
 
@@ -56,8 +66,10 @@ DNS troubleshooting · Pi-hole monitoring · Client identification · Hypothesis
 - The target device's exact make and model remain unconfirmed for the router-isolation follow-up.
 - The exact time the router block was applied was not recorded.
 - No matched, target-specific query counts before and after the block have been recorded.
+- The newly added older TV has not been characterized with its own matched per-client DNS baseline.
+- The aggregate activity reduction has not been tested across equal-duration windows under otherwise controlled conditions.
 - No packet-level analysis was performed.
 - The specific service's purpose on this device and the reasons for the requests were not conclusively characterized.
 - A later follow-up could compare filtered queries by client and timestamp, verify the device privately against its MAC address, and test whether a particular feature depends on a blocked service without weakening network-wide filtering unnecessarily.
 
-**Takeaway:** Controlled unplug/reconnect and router-isolation tests can help narrow down the source of network activity. Each result has limits: DNS logs show lookups, ping tests show reachability at a moment in time, and aggregate graphs do not prove what a single client did. The evidence supports further identification and validation, not a claim of compromise or data exfiltration.
+**Takeaway:** Controlled unplug/reconnect and router-isolation tests can help narrow down the source of network activity. The sustained network-wide drop despite another active television is a useful new observation and is consistent with the blocked client contributing a disproportionate amount of DNS activity. It is not yet a controlled, client-specific measurement and does not prove that all transmissions stopped. DNS logs show lookups, ping tests show reachability at a moment in time, and aggregate graphs do not prove what a single client did. The evidence supports further identification and validation, not a claim of compromise or data exfiltration.
