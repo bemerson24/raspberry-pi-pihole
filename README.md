@@ -31,7 +31,7 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 ## Case studies
 
-- [Smart TV DNS investigation — October 15, 2026](case-studies/smart-tv-dns-investigation-2026-10-15.md): attributed repeated DNS queries to a smart TV through a controlled unplug/reconnect test and documented limitations.
+- [Smart TV DNS investigation — October 15, 2026, with router-isolation follow-up — October 22–23, 2026](case-studies/smart-tv-dns-investigation-2026-10-15.md): documents the initial unplug/reconnect test and a later router-block/ping experiment. The follow-up distinguishes observed reachability and aggregate DNS activity from unverified device identity and cause.
 
 ## Evidence collection
 
