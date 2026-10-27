@@ -4,6 +4,8 @@
 
 ## Overview
 
+**Portfolio overview:** [View the complete cybersecurity learning portfolio](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/PORTFOLIO-OVERVIEW.md).
+
 This project documents my practical experience deploying Pi-hole on a Raspberry Pi 400 and learning about DNS filtering. It is a separate project from my coursework virtual lab, Ubuntu WSL 2 assessment, and portable Raspberry Pi capstone.
 
 ## Project work
