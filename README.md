@@ -35,6 +35,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Smart TV DNS investigation — October 15, 2026, with router-isolation follow-up — October 22–23, 2026](case-studies/smart-tv-dns-investigation-2026-10-15.md): documents the initial unplug/reconnect test, router block and ping experiment, and a subsequent observation that aggregate Pi-hole activity stayed substantially lower after an older TV was added and kept active. This remains a preliminary observation, not proof that all outbound traffic stopped or that one device alone caused the network-wide change.
 
+- [Laptop DNS portability and VPN troubleshooting — October 29, 2026](case-studies/laptop-dns-portability-vpn-2026-10-29.md): records campus website failures, recovery from Bitdefender VPN Error 9, and a still-unverified hypothesis about manually configured DNS across different networks.
+
 ## Evidence collection
 
 - [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a reusable template for time-stamped observations and privacy-safe validation. **This is a plan, not new test evidence.**
