@@ -59,3 +59,7 @@ DNS filtering is one layer of a broader security approach. This repository docum
 - [OctoPi printer management, 2020–2024](https://github.com/bemerson24/raspberry-pi-octopi)
 - [Cybersecurity Virtual Lab Environment](https://github.com/bemerson24/cybersecurity-virtual-lab-environment)
 - [Ubuntu WSL 2 Security Baseline](https://github.com/bemerson24/ubuntu-wsl2-security-baseline)
+
+## Professional profile
+
+[Brian Emerson on LinkedIn](https://www.linkedin.com/in/brianemersonpdx/) — professional background, education and career development.
