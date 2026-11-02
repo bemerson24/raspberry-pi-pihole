@@ -16,7 +16,7 @@ This project documents my practical experience deploying Pi-hole on a Raspberry 
 
 ## Skills
 
-Raspberry Pi, Linux, DNS, network troubleshooting, and technical documentation.
+Raspberry Pi, Linux, DNS, TLS certificate troubleshooting and technical documentation.
 
 ## Logical DNS flow
 
@@ -41,16 +41,17 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 ## Evidence collection
 
-- [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a reusable template for time-stamped observations and privacy-safe validation. **This is a plan, not new test evidence.**
+- [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a blank template for recording test times, observations and results.
 
 ## Documentation roadmap
 
 - [x] Add a scoped logical DNS-flow diagram (not a full network topology).
 - [ ] Document software versions.
-- [ ] Add sanitized examples, time-stamped observations, and test results.
-- [ ] Record lessons learned.
+- [x] Add case studies with command results and dated observations.
+- [ ] Collect matched per-client DNS measurements for the TV follow-up.
+- [x] Record troubleshooting lessons and unresolved questions.
 
-These items are planned documentation, not completed validation results. No blocking rate or measured security improvement is claimed.
+The case studies contain the recorded results. Software versions and matched TV query measurements still need documentation.
 
 ## Scope
 
