@@ -37,6 +37,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Laptop DNS portability and VPN troubleshooting — October 29, 2026](case-studies/laptop-dns-portability-vpn-2026-10-29.md): records campus website failures, recovery from Bitdefender VPN Error 9, and a still-unverified hypothesis about manually configured DNS across different networks.
 
+- [Pi-hole HTTPS and VPN DNS troubleshooting — November 2, 2026](case-studies/pihole-https-vpn-dns-2026-11-02.md): records certificate inspection, Windows CA trust setup and VPN on/off DNS comparisons. HTTPS dashboard access was restored; the earlier campus and battery-related browsing failures remain unresolved.
+
 ## Evidence collection
 
 - [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a reusable template for time-stamped observations and privacy-safe validation. **This is a plan, not new test evidence.**
