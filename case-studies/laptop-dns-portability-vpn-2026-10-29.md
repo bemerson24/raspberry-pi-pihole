@@ -2,7 +2,7 @@
 
 **Date:** October 29, 2026  
 **Environment:** HP EliteBook 840 G8 running Windows; Bitdefender VPN; home network with Pi-hole on a Raspberry Pi 400; college Wi-Fi  
-**Status:** VPN recovered. Suspected DNS configuration problem still requires controlled testing on campus.
+**Status:** VPN recovered. The original DNS-configuration hypothesis remains unconfirmed; later campus observations are linked below.
 
 ## What happened
 
@@ -30,7 +30,7 @@ A VPN can also change DNS resolution behavior while its tunnel is active. That c
 
 ## Next validation steps
 
-These are planned tests, **not completed results**:
+The following checklist records the validation plan from October 29; it is not a consolidated current-status checklist. Later observations are summarized below and do not establish the original cause:
 
 - [ ] Record the current Wi-Fi IPv4 and IPv6 DNS configuration privately before making changes. Do not publish actual home IP addresses, device names, or network identifiers.
 - [ ] Verify whether the manually entered DNS address is the Pi-hole, a public resolver, or something else.
@@ -41,6 +41,14 @@ These are planned tests, **not completed results**:
 - [ ] Once basic network access is stable, test the VPN separately and capture the exact message if the fault returns.
 
 Avoid broad network resets or changes to the Pi-hole, router, VirtualBox, or WSL configuration unless later evidence points there.
+
+## Later evidence — November 2–3
+
+The [November 2 home tests](pihole-https-vpn-dns-2026-11-02.md) recorded local-name lookup differences with the VPN connected and disconnected, plus restored HTTPS dashboard access.
+
+The [November 3 campus follow-up](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/docs/tcp-tls-session-analysis-2026-11-03.md) recorded successful public DNS, TCP/443 and command-line HTTPS checks, while Edge worked and Firefox failed with the VPN disconnected. Firefox worked after a normal restart and VPN reconnection. These observations narrow that later episode toward browser-specific behavior; they do not prove that the October 29 failure had the same cause or confirm the manually configured DNS hypothesis.
+
+*Follow-up links added November 7, 2026. No new network tests were performed for this documentation update.*
 
 ## Outcome and lesson
 
