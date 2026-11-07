@@ -29,7 +29,7 @@ flowchart LR
     PH -->|"When a blocking rule matches"| BLOCK["DNS block response"]
 ```
 
-Other household clients and potential alternate DNS paths are not inventoried in this diagram.
+Other household clients and potential alternate DNS paths are not inventoried in this diagram. Pi-hole filters queries that reach it; this diagram does not establish that VPN or browser secure-DNS requests use Pi-hole. The November 2 case study records different local-name lookup results with the VPN connected and disconnected.
 
 ## Case studies
 
