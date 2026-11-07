@@ -4,15 +4,15 @@
 
 ## Overview
 
-**Portfolio overview:** [View the complete cybersecurity learning portfolio](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/PORTFOLIO-OVERVIEW.md).
+**Portfolio overview:** [View the cybersecurity portfolio](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/PORTFOLIO-OVERVIEW.md).
 
-This project documents my practical experience deploying Pi-hole on a Raspberry Pi 400 and learning about DNS filtering. It is a separate project from my coursework virtual lab, Ubuntu WSL 2 assessment, and portable Raspberry Pi capstone.
+Pi-hole deployment on a Raspberry Pi 400, with DNS-query investigations, VPN/local DNS comparisons and HTTPS dashboard troubleshooting. This environment is separate from the VirtualBox lab, Ubuntu WSL 2 assessment and planned portable Raspberry Pi lab.
 
 ## Project work
 
 - Set up Pi-hole on a Raspberry Pi 400.
-- Practiced Linux administration and DNS troubleshooting.
-- Reviewed how DNS-based filtering works and its limitations.
+- Investigated local DNS resolution and VPN-dependent lookup behavior.
+- Documented DNS-query observations, HTTPS recovery and unresolved causes.
 
 ## Skills
 
@@ -55,7 +55,7 @@ The case studies contain the recorded results. Software versions and matched TV 
 
 ## Scope
 
-DNS filtering is one layer of a broader security approach. This repository documents a learning project and does not claim complete network protection.
+DNS filtering is one layer of a broader security approach. The documented tests cover specific clients and conditions; they do not establish complete network protection.
 
 ## Related projects
 
