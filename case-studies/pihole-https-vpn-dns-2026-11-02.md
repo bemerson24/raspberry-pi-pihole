@@ -66,7 +66,7 @@ Browser secure DNS, Windows DNS and VPN DNS can follow different paths. A workin
 - The successful dashboard test was performed with the VPN disconnected. A permanent arrangement for VPN use alongside local Pi-hole access is not yet validated.
 - HTTPS here protects dashboard access. It does not establish encrypted DNS for household clients or upstream DNS traffic.
 - The VPN on/off comparison supports a local DNS interaction. It does not identify the exact VPN setting or packet-filtering mechanism.
-- Earlier school browsing failures and the apparent battery association remain unexplained. No failure-state campus comparison was captured.
+- No failure-state campus comparison was captured in this November 2 home session. The [November 3 campus follow-up](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/docs/tcp-tls-session-analysis-2026-11-03.md) later documented successful public DNS and command-line HTTPS checks alongside a Firefox-without-VPN failure. Its root cause and the earlier apparent battery association remain unresolved.
 - A future recurrence should be tested before restarting: record the network, VPN state, resolver and `nslookup example.com` results with VPN on and off. Firefox secure DNS should also be considered if browser behavior differs from command-line results.
 - Automatic certificate renewal and trust behavior after renewal have not been verified.
 
