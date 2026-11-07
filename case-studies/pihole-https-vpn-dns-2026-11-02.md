@@ -1,7 +1,7 @@
 # Pi-hole HTTPS and VPN DNS troubleshooting
 
 **Date:** November 2, 2026  
-**Status:** HTTPS dashboard access restored on the Windows laptop. VPN/local DNS interaction reproduced. Earlier campus and battery-related browsing failures remain unresolved.
+**Status:** HTTPS dashboard access restored on the Windows laptop. Local DNS behavior compared with VPN connected and disconnected. Earlier campus and battery-related browsing failures remain unresolved.
 
 ## What I was trying to do
 
@@ -20,10 +20,18 @@ This continues the [laptop DNS portability investigation](laptop-dns-portability
 | Allow Firefox to use the system resolver for `pi.hole` | Name resolution still failed | The browser exception alone did not resolve the problem |
 | Windows lookup with VPN connected | Default resolver `198.18.0.33` returned non-existent domain for `pi.hole`; direct queries to Pi-hole timed out | The VPN-connected state affected local DNS access |
 | Repeat both lookups after disconnecting Bitdefender VPN | Both resolved `pi.hole` to the Pi's local addresses | Disconnecting the VPN restored local DNS resolution in this test |
-| Import Pi-hole's CA into the Windows current-user trusted root store | Dashboard access reported working afterward | The trust change resolved the observed dashboard access problem on this laptop |
+| Import Pi-hole's CA into the Windows current-user trusted root store | Dashboard access reported working afterward | Dashboard access worked after the trust change, with the VPN disconnected; this does not isolate every contributing setting |
 | Query `example.com` with VPN on and off | Both returned the same set of IPv4 and IPv6 addresses | Public DNS worked through both paths during this later comparison |
 
 The Pi also resolved its own name successfully. That was a server-side check, not evidence that the Windows client could reach its DNS service. Repeating the commands from Windows was necessary.
+
+## What the DNS comparison supports
+
+Pi-hole filters DNS queries that reach it; its presence on the home network does not establish that every application or VPN uses it. In the recorded VPN-connected test, the default resolver returned a negative answer for `pi.hole` and direct queries to Pi-hole timed out. With the VPN disconnected, both lookups succeeded.
+
+The later successful `example.com` lookups establish that public-name resolution worked during that comparison. Matching returned addresses do not establish that both queries used the same resolver or passed through Pi-hole. Local-name resolution and public-name resolution must be tested separately.
+
+**Evidence boundary:** These are documented observations from the November 2 session. No new network test was performed for this November 6 documentation review. The exact VPN routing, DNS interception or filtering mechanism remains unverified.
 
 ## SSH and certificate handling
 
