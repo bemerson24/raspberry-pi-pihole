@@ -48,8 +48,6 @@ The [November 2 home tests](pihole-https-vpn-dns-2026-11-02.md) recorded local-n
 
 The [November 3 campus follow-up](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/docs/tcp-tls-session-analysis-2026-11-03.md) recorded successful public DNS, TCP/443 and command-line HTTPS checks, while Edge worked and Firefox failed with the VPN disconnected. Firefox worked after a normal restart and VPN reconnection. These observations narrow that later episode toward browser-specific behavior; they do not prove that the October 29 failure had the same cause or confirm the manually configured DNS hypothesis.
 
-*Follow-up links added November 7, 2026. No new network tests were performed for this documentation update.*
-
 ## Outcome and lesson
 
 The immediate VPN failure was recovered without reinstalling the software or resetting the Windows network stack. The suspected **home-versus-campus DNS portability problem remains open**.
