@@ -31,7 +31,7 @@ Pi-hole filters DNS queries that reach it; its presence on the home network does
 
 The later successful `example.com` lookups establish that public-name resolution worked during that comparison. Matching returned addresses do not establish that both queries used the same resolver or passed through Pi-hole. Local-name resolution and public-name resolution must be tested separately.
 
-**Evidence boundary:** These are documented observations from the November 2 session. No new network test was performed for this November 6 documentation review. The exact VPN routing, DNS interception or filtering mechanism remains unverified.
+**Evidence boundary:** These are documented observations from the November 2 session. The exact VPN routing, DNS interception or filtering mechanism remains unverified.
 
 ## SSH and certificate handling
 
