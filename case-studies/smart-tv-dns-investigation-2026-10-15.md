@@ -76,12 +76,12 @@ DNS troubleshooting · Pi-hole monitoring · Client identification · Hypothesis
 
 ## November 11, 2026 — device-specific DNS follow-up
 
-**Evidence:** Pi-hole dashboard, Top Clients tables, filtered Query Log, and router client entry screenshots reviewed in the working session. The screenshots have not yet been sanitized or committed to this public repository.
+**Evidence:** The four screenshots below document the dashboard totals, client counts, filtered queries, and router entry. The television is labeled `Client A` throughout the evidence.
 
 - The dashboard displayed **92,632 total queries**, **40,381 blocked queries** (43.6%), and **16 active clients** for the displayed reporting period. The exact window boundaries were not independently recorded.
-- The top-client tables listed client `192.168.0.242` with **33,708 requests** and **30,703 blocked requests**. That is approximately **91.1% of that client's queries** and **76.0% of the dashboard's blocked total**, assuming the panels share the same reporting window.
+- The top-client tables listed client `Client A` with **33,708 requests** and **30,703 blocked requests**. That is approximately **91.1% of that client's queries** and **76.0% of the dashboard's blocked total**, assuming the panels share the same reporting window.
 - A filtered query-log screenshot showed ten consecutive blocked **A-record** queries to `global.telemetry.insights.video.a2z.com` from that client, timestamped **13:12:30–13:12:48** on November 11, every two seconds. The green **Allow** controls are actions offered by the UI, not evidence of permitted queries. Ten rows establish the interval in that sample only; they do not show that all blocked requests were to this one domain.
-- The router's corresponding client entry was labeled **Android** and showed a TV icon on **5 GHz Wi-Fi**. The household owner identified the device as **their daughter's Insignia television**. This is user-supplied attribution combined with router and Pi-hole client matching; the exact model and correspondence with the October router-isolation target have not been independently established.
+- The router's corresponding client entry was labeled **Android** and showed a TV icon on **5 GHz Wi-Fi**. The household owner identified the device as **an Insignia television**. This is user-supplied attribution combined with router and Pi-hole client matching; the exact model and correspondence with the October router-isolation target have not been independently established.
 - The owner reported that the TV **currently works normally while the Pi-hole DNS blocks remain active**. The owner also reported a previous router-level block that disrupted the TV's network-dependent functionality. The precise timing and rule state of that earlier router-blocking observation were not captured in this follow-up.
 
 ### Interpretation and disposition
@@ -90,4 +90,14 @@ Repeated blocked queries for an Amazon-associated video telemetry hostname are c
 
 Given the reported normal TV operation, **no additional device-wide isolation or DNS allowlisting is recommended on the evidence available**. The router-wide connectivity disruption and domain-level DNS filtering have different scopes; they should not be treated as equivalent controls.
 
-**Outstanding work:** Sanitize and publish selected screenshots, preserve the exact client-specific query window for any later comparison, and independently match the device identity if tying the November observation to the October target becomes necessary. Do not publish the raw MAC address or unrelated household query history.
+**Outstanding work:** Preserve the exact client-specific query window for any later comparison, and independently match the device identity if tying the November observation to the October target becomes necessary. Do not publish the raw MAC address or unrelated household query history.
+
+### Screenshots
+
+![Pi-hole dashboard totals and query activity](../evidence/2026-11-11/01-dashboard.png)
+
+![Total and blocked query counts by client](../evidence/2026-11-11/02-top-clients.png)
+
+![Filtered query log for Client A](../evidence/2026-11-11/03-filtered-query-log.png)
+
+![Router client entry for Client A](../evidence/2026-11-11/04-router-client.png)
