@@ -76,3 +76,38 @@ Browser secure DNS, Windows DNS and VPN DNS can follow different paths. A workin
 - [Pi-hole webserver configuration](https://docs.pi-hole.net/ftldns/configfile/) — HTTPS and webserver settings.
 
 *Documentation prepared with ChatGPT assistance from my command output, screenshots and reported results. The observations above are from this troubleshooting session; follow-up items are not completed tests.*
+
+## Follow-up validation — November 11, 2026
+
+**Purpose:** Repeat the Windows-to-Pi-hole DNS test under controlled Bitdefender VPN connection states, and record the Pi-hole baseline. These are home-network observations; this is not an identified security incident.
+
+### Environment and baseline
+
+- Raspberry Pi 400 running Linux kernel `6.18.50+rpt-rpi-v8` (reported by the SSH login banner).
+- Pi-hole Core **v6.4.3**, Web **v6.6**, FTL **v6.7.1**, as reported by `pihole -v` on November 11. Each component reported an update available; no update was performed during these tests.
+- `sudo pihole status` reported FTL listening on port 53 over TCP and UDP for both IPv4 and IPv6, and blocking enabled. An initial unprivileged status check produced a configuration-read permission warning, which did not recur with `sudo`.
+- Windows PowerShell 5.1 / OpenSSH for Windows 9.5p2. The initial SSH attempt failed because default key filenames did not match the existing custom key name. Explicitly specifying the existing `home_dns_ed25519` private key allowed authenticated SSH access. The key contents are not published.
+
+### DNS checks
+
+| Source and query | Observed result | Evidence boundary |
+| --- | --- | --- |
+| Raspberry Pi: `dig @127.0.0.1 example.com A` at 12:54:25 PST | `NOERROR`; two A records; `EDE: 3 (Stale Answer)`; TTL 0; 3 ms | Demonstrates a stale response served by the local resolver; does not identify upstream cause |
+| Raspberry Pi: same query at 12:55:43 PST | `NOERROR`; same two A records; TTL 118; no stale-answer EDE; 0 ms | Consistent with cache refresh; upstream transaction not captured |
+| Raspberry Pi: `nslookup example.com 192.168.0.116` | Two IPv4 and two IPv6 answers | Confirms resolution via the Pi's LAN IPv4 address **from the Pi itself**, not from Windows |
+
+### Windows client: A–B–A VPN-state test
+
+With the Windows laptop querying the Pi-hole server explicitly using `nslookup example.com 192.168.0.116`:
+
+| Sequence | Bitdefender VPN state | Observed result |
+| --- | --- | --- |
+| A1 | Connected | Repeated DNS request timeouts; no `example.com` answer |
+| B | Disconnected | Server identified as `pi.hole`; two IPv4 and two IPv6 answers returned |
+| A2 | Reconnected | Repeated DNS request timeouts; no `example.com` answer |
+
+The successful Windows test proves a client-to-Pi-hole DNS path was available with the VPN disconnected. The repeated failure after reconnecting strengthens the association between VPN state and failure of **direct queries to Pi-hole**. It does not establish whether Bitdefender routing, packet filtering, DNS interception, a firewall interaction, or another mechanism caused the timeouts. The `Server: UnKnown` label in timed-out output is not, by itself, evidence of DNS failure. There was no packet capture, firewall-log correlation, or analysis of default Windows DNS traffic in this follow-up.
+
+**Disposition:** Reproducible, VPN-associated local DNS connectivity issue; mechanism unresolved. No indication of compromise established. Do not change production DNS or VPN security settings solely on this evidence.
+
+**Evidence still needed:** Redacted Windows terminal screenshots for A1/B/A2, a redacted Pi-hole query-log view showing whether the VPN-off client's successful lookup is recorded, and optional versions/service-status screenshots. Do not upload unredacted client identifiers, sensitive domains, private key contents, or certificates containing private keys.
