@@ -59,6 +59,10 @@ The case studies contain the recorded results. Software versions and matched TV 
 
 DNS filtering is one layer of a broader security approach. The documented tests cover specific clients and conditions; they do not establish complete network protection.
 
+## Professional profile
+
+[Brian Emerson on LinkedIn](https://www.linkedin.com/in/brianemersonpdx/) — professional background, education and career development.
+
 ## Related projects
 
 - [OctoPi printer management, 2020–2024](https://github.com/bemerson24/raspberry-pi-octopi)
