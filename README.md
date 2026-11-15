@@ -39,6 +39,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Pi-hole HTTPS and VPN DNS troubleshooting — November 2, 2026](case-studies/pihole-https-vpn-dns-2026-11-02.md): records certificate inspection, Windows CA trust setup and VPN on/off DNS comparisons. HTTPS dashboard access was restored; the earlier campus and battery-related browsing failures remain unresolved.
 
+- [Windows 11 / WSL2 DNS behavior with Bitdefender VPN and Pi-hole — November 15, 2026](case-studies/wsl2-bitdefender-pihole-dns-2026-11-15.md): controlled VPN-state comparison using Windows DNS over TCP, standard lookups, WSL2 unique-hostname probes and Pi-hole query-log evidence. VPN-state effects observed; exact DNS redirection/filtering mechanism unverified.
+
 ## Evidence collection
 
 - [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a blank template for recording test times, observations and results.
