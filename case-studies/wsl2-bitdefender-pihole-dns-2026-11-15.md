@@ -36,7 +36,7 @@ Run these in **Windows PowerShell on the host**, not inside a VirtualBox guest. 
 | Connected | `Resolve-DnsName -Name example.com -Type A -Server 192.168.0.116 -TcpOnly -DnsOnly` | Two A answers: `172.66.147.243`, `104.20.23.154` | Direct Pi-hole DNS answer over TCP succeeded |
 | Disconnected | `nslookup example.com 192.168.0.116` | `Server: pi.hole`; IPv4 and IPv6 answers | Direct lookup succeeded with VPN disconnected |
 | Disconnected | `wsl -d Ubuntu -- getent ahostsv4 wsl-probe-20261115-02.example.com` | No IP printed; matching A query appeared in Pi-hole Query Log | WSL-generated unique lookup reached Pi-hole |
-| Connected (operator confirmed) | `wsl -d Ubuntu -- getent ahostsv4 wsl-vpn-confirmed-20261115.example.com` | No IP printed; **no matching query** in filtered Pi-hole log after disconnecting VPN to inspect it | Pi-hole receipt not observed in this VPN-on test |
+| Connected (I verified the VPN state) | `wsl -d Ubuntu -- getent ahostsv4 wsl-vpn-confirmed-20261115.example.com` | No IP printed; **no matching query** in filtered Pi-hole log after disconnecting VPN to inspect it | Pi-hole receipt not observed in this VPN-on test |
 | Connected | `wsl -d Ubuntu -- getent ahostsv4 example.com` | Two IPv4 answers returned | WSL hostname resolution remained functional; cache/upstream not independently identified |
 | Connected | `Resolve-DnsName -Name example.net -Type A -Server 198.18.0.33 -DnsOnly` | Two A answers: `104.20.21.8`, `172.66.175.59` | The Bitdefender adapter's configured DNS endpoint could answer a direct query |
 | Connected | `Get-DnsClientNrptPolicy -Effective` | No output | No effective NRPT rule returned; other VPN DNS handling remains possible |
@@ -47,7 +47,7 @@ For the WSL negative test names, no returned address is expected: the hostnames 
 
 The Pi-hole Query Log filter showed **one A query** for `wsl-probe-20261115-02.example.com` on November 15 at approximately **11:19:09 AM** from `192.168.0.96`. This supports a route from WSL's request through Windows DNS handling to Pi-hole, with the Windows host shown as client.
 
-For `wsl-vpn-confirmed-20261115.example.com`, the user verified Bitdefender was **connected during the WSL lookup**, then disconnected it to access the Pi-hole dashboard. The matching domain filter returned **no records**.
+For `wsl-vpn-confirmed-20261115.example.com`, I confirmed Bitdefender was **connected during the WSL lookup**, then disconnected it to access the Pi-hole dashboard. The matching domain filter returned **no records**.
 
 An earlier hostname containing `vpn-on` was in fact tested **with the VPN disconnected**. It is excluded from the VPN-on evidence rather than reclassified based on its name.
 
@@ -87,4 +87,4 @@ Potential next investigation: correlate timestamped packet capture or Pi-hole FT
 
 This project demonstrates controlled A/B testing, protocol-aware DNS troubleshooting, Linux/Windows interoperability, client/server evidence correlation, and the difference between an observed outcome and an inferred network path.
 
-*Documentation assembled with writing assistance from the operator's recorded commands, outputs, and screenshots. No packet-level assertions are presented as verified.*
+*I used writing assistance to organize the commands, outputs, and screenshots from my investigation. I have not presented any packet-level routing mechanism as verified.*
