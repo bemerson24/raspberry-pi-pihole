@@ -1,7 +1,7 @@
 # Case Study: Adding Docker-Based Monitoring to My Pi-hole Raspberry Pi
 
 **Dates:** November 15–16, 2026 (Pacific time)  
-**Status as of November 16:** Pi-hole-to-Unbound forwarding previously confirmed; post-reboot native DNS tests passed; Uptime Kuma slim image deployed and monitoring checks reverified. Beszel Hub/Agent reporting and a cgroup memory controller repair were validated with both nonzero Docker memory statistics and refreshed Beszel Docker CPU, memory and network graphs. Root storage, I/O, temperature, system load and Wi-Fi signal panels also populated. Screenshots remain session evidence, not published sanitized assets.  
+**Status as of November 16:** Pi-hole-to-Unbound forwarding previously confirmed; post-reboot native DNS tests passed; Uptime Kuma slim image deployed and monitoring checks reverified. Beszel Hub/Agent reporting and a cgroup memory controller repair were validated with both nonzero Docker memory statistics and refreshed Beszel Docker CPU, memory and network graphs. Root storage, I/O, temperature, system load and Wi-Fi signal panels also populated. Four privacy-reviewed Beszel dashboard screenshots are now published; the Uptime Kuma screenshot remains unpublished.  
 **Project:** Existing Raspberry Pi 400 home-DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
@@ -211,7 +211,18 @@ The new one-hour dashboard views showed the following **observed** results (appr
 
 The plotted transition after reboot aligns with the `docker stats` result of nonzero memory usage for all three containers. The plots substantiate monitoring recovery at the observed time; the data do **not** establish uninterrupted monitoring across the reboot, alert delivery, precise per-container attribution without inspecting labels, or a production security-detection capability.
 
-**Privacy and provenance:** I reviewed the supplied screenshots, but I have **not** committed their raw image files. The dashboard contains a private Wi-Fi network identifier, so any future image publication requires careful cropping/redaction first. This technical record intentionally does not disclose the SSID, private LAN address, keys or tokens.
+**Privacy and provenance:** The original screenshots remain private. I published four privacy-reviewed copies, preserving the actual plotted data. In the fourth image I obscured the private Wi-Fi SSID with an opaque mask and cropped out an incomplete container table containing a private LAN address. The source files, editing scope and SHA-256 hashes are documented in the [Beszel evidence notes](../evidence/beszel/README.md). I did not redraw chart lines, fabricate measurements, or disclose credentials.
+
+### Published Beszel dashboard evidence — November 16
+
+The captured panels cover a selected approximately **11:40 AM–12:40 PM Pacific one-hour view**, not a demonstrated period of uninterrupted uptime. They show `home-dns` Up, populated host and Docker CPU timelines, nonzero container memory, and active storage, network, load, temperature and Wi-Fi charts. These are dashboard observations, not exported raw telemetry or independent proof that every background service or household DNS client was continuously healthy.
+
+- [01 — Beszel host and Docker CPU, with host memory](../evidence/beszel/01-beszel-host-and-docker-cpu-2026-11-16.png)
+- [02 — Docker memory, root disk usage and root I/O](../evidence/beszel/02-beszel-docker-memory-and-storage-2026-11-16.png)
+- [03 — Host bandwidth, Docker network I/O and load averages](../evidence/beszel/03-beszel-network-and-load-2026-11-16.png)
+- [04 — CPU temperature and Wi-Fi signal (SSID redacted)](../evidence/beszel/04-beszel-temperature-wifi-2026-11-16.png)
+
+The independent `docker stats --no-stream` measurements above support the conclusion that memory accounting was restored. These screenshots corroborate that Beszel subsequently displayed nonzero per-container memory metrics. They do **not** demonstrate alert delivery, a clean backup restoration or security-event detection.
 
 ## Verification boundaries and next checks
 
@@ -225,10 +236,10 @@ The plotted transition after reboot aligns with the `docker stats` result of non
 | Uptime Kuma checks reverified after slim migration | **Verified in November 16 dashboard screenshot** (all four shown Up); public evidence image not yet committed |
 | Backup can be restored into a clean instance | **Not tested** |
 | Beszel hub running and system registered | **Verified** |
-| Beszel agent connected / host metrics collecting | **Verified after reboot** for host CPU/memory, Docker CPU/memory/network, root disk/I/O, bandwidth, load, CPU temperature and Wi-Fi signal panels; screenshots inspected but not yet published in sanitized form |
+| Beszel agent connected / host metrics collecting | **Verified in November 16 screenshots** for host CPU/memory, Docker CPU/memory/network, root disk/I/O, bandwidth, load, CPU temperature and Wi-Fi signal panels; four privacy-reviewed images now published |
 | Long-term availability, alert delivery or incident-detection capability | **Not demonstrated** |
 
-The post-reboot Beszel graphs and native Pi-hole/Unbound DNS checks have passed. Any further monitoring work should focus on sanitized evidence publication, alert delivery testing if desired and longer observation, without repeating the completed cgroup repair. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
+The post-reboot Beszel graphs and native Pi-hole/Unbound DNS checks have passed. Four sanitized Beszel evidence images are now published. Remaining optional work includes privacy-reviewed Uptime Kuma image publication, alert-delivery testing, a clean backup restore and longer observation. None requires repeating the completed cgroup repair or redeploying the Agent. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
 
 ## Why this matters for my security-operations development
 
@@ -238,6 +249,6 @@ These are foundational skills for understanding the availability and health of i
 
 ## Evidence and privacy
 
-This report is transcribed from the November 15–16 command outputs and dashboard observations. No fresh evidence images, Docker Compose file, monitoring database, secrets or raw host logs are published with this case study. LAN addresses are represented by placeholders. Commands and configurations not independently captured should not be treated as fully reproducible deployment artifacts.
+This report is based on the November 15–16 command outputs and dashboard observations. Four sanitized Beszel screenshots and their provenance notes are now public in [evidence/beszel](../evidence/beszel/README.md). The original unredacted screenshots, Uptime Kuma dashboard screenshot, Docker Compose files, monitoring database, secrets and raw host logs are not published. LAN addresses in the written report remain placeholders. Commands and configurations not independently captured should not be treated as fully reproducible deployment artifacts.
 
 *Documentation note: I used writing assistance to organize this report from the commands, results and screenshots I reviewed during my investigation. I distinguish observed results from interpretations and unfinished tests; writing assistance is not evidence of a technical result.*
