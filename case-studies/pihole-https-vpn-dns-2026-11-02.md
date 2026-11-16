@@ -75,7 +75,7 @@ Browser secure DNS, Windows DNS and VPN DNS can follow different paths. A workin
 - [Pi-hole TLS/SSL documentation](https://docs.pi-hole.net/api/tls/) — CA trust and hostname requirements.
 - [Pi-hole webserver configuration](https://docs.pi-hole.net/ftldns/configfile/) — HTTPS and webserver settings.
 
-*Documentation prepared with ChatGPT assistance from my command output, screenshots and reported results. The observations above are from this troubleshooting session; follow-up items are not completed tests.*
+*Documentation note: I used writing assistance to organize this report from the commands, results and screenshots I reviewed during my investigation. I distinguish observed results from interpretations and unfinished tests; writing assistance is not evidence of a technical result.*
 
 ## Follow-up validation — November 11, 2026
 
