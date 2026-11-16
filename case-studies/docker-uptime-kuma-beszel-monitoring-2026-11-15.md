@@ -1,7 +1,7 @@
 # Case Study: Adding Docker-Based Monitoring to My Pi-hole Raspberry Pi
 
 **Dates:** November 15–16, 2026 (Pacific time)  
-**Status as of November 16:** Pi-hole-to-Unbound forwarding previously confirmed; post-reboot native DNS tests passed; Uptime Kuma slim image deployed and monitoring checks reverified. Beszel Hub/Agent reporting and a cgroup memory controller repair were validated with both nonzero Docker memory statistics and refreshed Beszel Docker CPU, memory and network graphs. Root storage, I/O, temperature, system load and Wi-Fi signal panels also populated. Four privacy-reviewed Beszel dashboard screenshots are now published; the Uptime Kuma screenshot remains unpublished.  
+**Status as of November 16:** Pi-hole-to-Unbound forwarding previously confirmed; post-reboot native DNS tests passed; Uptime Kuma slim image deployed and monitoring checks reverified. Beszel Hub/Agent reporting and a cgroup memory controller repair were validated with both nonzero Docker memory statistics and refreshed Beszel Docker CPU, memory and network graphs. Root storage, I/O, temperature, system load and Wi-Fi signal panels also populated. Four privacy-reviewed Beszel dashboard screenshots and one earlier three-monitor Uptime Kuma screenshot are now published; the separate post-migration four-monitor screenshot remains unpublished.  
 **Project:** Existing Raspberry Pi 400 DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
@@ -55,7 +55,7 @@ Three Uptime Kuma monitors were configured and shown **Up / green** in the captu
 | Internet Connectivity | ICMP ping | `1.1.1.1` | Up; approximately 13.10 ms latency in the observed snapshot |
 | Pi-hole DNS Resolution | DNS A-record lookup | `example.com` using `<PIHOLE_LAN_IP>` on port `53` | Up; approximately 5 ms current / 8.33 ms average response time in the observed snapshot |
 
-The screenshot displayed 100% for these monitors **at that point in the recorded observation**. It is not evidence of weeks or months of uninterrupted availability. The dashboard verification occurred **before** the later slim-image migration; a new post-migration monitor screenshot has not been archived in this case study.
+The screenshot displayed 100% for these monitors **at that point in the recorded observation**. It is not evidence of weeks or months of uninterrupted availability. The dashboard verification occurred **before** the later slim-image migration. I have now published a [privacy-reviewed copy of the earlier three-monitor dashboard](../evidence/uptime-kuma/README.md), including hashes and explicit limits. The separate post-migration four-monitor screenshot is still not archived publicly.
 
 The checks isolate three useful failure categories: local gateway access, outside-network reachability, and a DNS query answered by the specific Pi-hole resolver. They are **availability and diagnostic checks**, not intrusion-detection rules.
 
@@ -115,7 +115,7 @@ The selected **Pi-hole DNS Resolution** monitor was **Up**, querying `example.co
 
 **Interpretation:** This screenshot demonstrates the monitor configuration and a functioning DNS check **after** the slim-image migration, together with currently Up status for the other three displayed monitors. The interface's reported 24-hour / 30-day / 1-year 100% values do **not** independently prove continuous monitoring over those entire periods. This is **not** a clean restore test, a measurement of alert delivery, or security-event detection.
 
-**Evidence handling:** The screenshot was inspected during the investigation; a sanitized copy is **not yet committed to this repository**. It remains a session observation rather than a publicly archived image. Disk/network/temperature graphs were still unverified at this point in the sequence and were subsequently checked in the post-reboot follow-up below. Alert delivery remains untested.
+**Evidence handling:** This *post-migration four-monitor* screenshot was inspected during the investigation; a copy is **not yet committed to this repository**. It remains a recorded session observation rather than a publicly archived image. The [published earlier screenshot](../evidence/uptime-kuma/README.md) displays only the original three monitors and must not be substituted as post-migration proof. Disk/network/temperature graphs were still unverified at this point in the sequence and were subsequently checked in the post-reboot follow-up below. Alert delivery remains untested.
 
 ## November 16 follow-up — Beszel CPU and memory panels
 
@@ -233,13 +233,13 @@ The independent `docker stats --no-stream` measurements above support the conclu
 | Three Uptime Kuma checks showed Up | **Verified snapshot before image migration** |
 | Uptime Kuma application-state archive and transferred copy intact | **Verified** gzip test, expected entries and matching SHA-256 |
 | Slim Uptime Kuma image started; old image removed | **Verified**, with before/after disk-space observations |
-| Uptime Kuma checks reverified after slim migration | **Verified in November 16 dashboard screenshot** (all four shown Up); public evidence image not yet committed |
+| Uptime Kuma checks reverified after slim migration | **Recorded in November 16 dashboard observation** (four monitors shown Up); that screenshot is not yet publicly archived. A different earlier three-monitor snapshot is now public |
 | Backup can be restored into a clean instance | **Not tested** |
 | Beszel hub running and system registered | **Verified** |
 | Beszel agent connected / host metrics collecting | **Verified in November 16 screenshots** for host CPU/memory, Docker CPU/memory/network, root disk/I/O, bandwidth, load, CPU temperature and Wi-Fi signal panels; four privacy-reviewed images now published |
 | Long-term availability, alert delivery or incident-detection capability | **Not demonstrated** |
 
-The post-reboot Beszel graphs and native Pi-hole/Unbound DNS checks have passed. Four sanitized Beszel evidence images are now published. Remaining optional work includes privacy-reviewed Uptime Kuma image publication, alert-delivery testing, a clean backup restore and longer observation. None requires repeating the completed cgroup repair or redeploying the Agent. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
+The post-reboot Beszel graphs and native Pi-hole/Unbound DNS checks have passed. Four sanitized Beszel evidence images are now published. Remaining optional work includes archiving the exact four-monitor post-migration Uptime Kuma screenshot if recovered, alert-delivery testing, a clean backup restore and longer observation. None requires repeating the completed cgroup repair or redeploying the Agent. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
 
 ## Why this matters for my security-operations development
 
@@ -249,6 +249,6 @@ These are foundational skills for understanding the availability and health of i
 
 ## Evidence and privacy
 
-This report is based on the November 15–16 command outputs and dashboard observations. Four sanitized Beszel screenshots and their provenance notes are now public in [evidence/beszel](../evidence/beszel/README.md). The original unredacted screenshots, Uptime Kuma dashboard screenshot, Docker Compose files, monitoring database, secrets and raw host logs are not published. LAN addresses in the written report remain placeholders. Commands and configurations not independently captured should not be treated as fully reproducible deployment artifacts.
+This report is based on the November 15–16 command outputs and dashboard observations. Four sanitized Beszel screenshots are public in [evidence/beszel](../evidence/beszel/README.md), and an earlier three-monitor Uptime Kuma screenshot is public in [evidence/uptime-kuma](../evidence/uptime-kuma/README.md), each with provenance notes. The original source images, separate post-migration four-monitor screenshot, Docker Compose files, monitoring database, secrets and raw host logs are not published. LAN addresses in the written report remain placeholders. Commands and configurations not independently captured should not be treated as fully reproducible deployment artifacts.
 
 *Documentation note: I used writing assistance to organize this report from the commands, results and screenshots I reviewed during my investigation. I distinguish observed results from interpretations and unfinished tests; writing assistance is not evidence of a technical result.*
