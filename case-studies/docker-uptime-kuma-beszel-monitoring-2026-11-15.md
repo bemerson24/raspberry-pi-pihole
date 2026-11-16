@@ -1,7 +1,7 @@
 # Case Study: Adding Docker-Based Monitoring to My Pi-hole Raspberry Pi
 
 **Dates:** November 15–16, 2026 (Pacific time)  
-**Status as of November 16:** Pi-hole forwarding to Unbound previously confirmed; Uptime Kuma slim image deployed and monitors rechecked; Beszel Hub/Agent connected with host CPU and memory graphs. I traced zero-valued Docker container memory statistics to a disabled kernel cgroup memory controller, enabled it through a backed-up boot-parameter change, rebooted, and verified nonzero per-container memory reporting. Post-reboot Pi-hole and Unbound active-service status and local DNS answers are now verified; refreshed Beszel dashboard checks remain pending.  
+**Status as of November 16:** Pi-hole-to-Unbound forwarding previously confirmed; post-reboot native DNS tests passed; Uptime Kuma slim image deployed and monitoring checks reverified. Beszel Hub/Agent reporting and a cgroup memory controller repair were validated with both nonzero Docker memory statistics and refreshed Beszel Docker CPU, memory and network graphs. Root storage, I/O, temperature, system load and Wi-Fi signal panels also populated. Screenshots remain session evidence, not published sanitized assets.  
 **Project:** Existing Raspberry Pi 400 home-DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
@@ -170,7 +170,7 @@ cpuset cpu io memory pids
 
 All three containers appeared in the stats output with nonzero memory readings. The observed network/block I/O values also showed activity for some containers. These values are **one post-reboot sample**, not sustained load measurements.
 
-**Disposition:** The explicitly disabled kernel memory cgroup controller was the evidence-supported cause of Docker reporting `0B / 0B` memory for every container. The override successfully restored kernel memory-controller availability and Docker memory accounting. A refreshed Beszel dashboard after this reboot has **not yet been inspected** to establish whether its per-container graphs now populate. Pi-hole and Unbound service recovery was subsequently tested by service status and direct local DNS queries as documented below; Docker stats alone did not establish DNS service health. No secrets or LAN addresses were included in this report.
+**Disposition:** The explicitly disabled kernel memory cgroup controller was the evidence-supported cause of Docker reporting `0B / 0B` memory for every container. The override successfully restored kernel memory-controller availability and Docker memory accounting. A refreshed Beszel dashboard was **not yet inspected at the time of that Docker command**; subsequent November 16 screenshots confirmed per-container graphs, as documented below. Pi-hole and Unbound service recovery was subsequently tested by service status and direct local DNS queries as documented below; Docker stats alone did not establish DNS service health. No secrets or LAN addresses were included in this report.
 
 ## November 16 follow-up — Native DNS recovery verified after reboot
 
@@ -190,7 +190,28 @@ dig @127.0.0.1 -p 5335 example.com +short
 104.20.23.154
 ```
 
-**Result:** Both `pihole-FTL` and `unbound` were active and both local resolvers returned A records for `example.com` after reboot. The differing order of returned addresses is not a failure. This validates each service's local lookup path at the time of observation. The earlier, separate Pi-hole forwarding log established that a specific query was forwarded to Unbound; the two direct queries here do not independently trace the forwarding path or demonstrate DNS availability for every household client. A refreshed Beszel dashboard after the reboot remains to be checked.
+**Result:** Both `pihole-FTL` and `unbound` were active and both local resolvers returned A records for `example.com` after reboot. The differing order of returned addresses is not a failure. This validates each service's local lookup path at the time of observation. The earlier, separate Pi-hole forwarding log established that a specific query was forwarded to Unbound; the two direct queries here do not independently trace the forwarding path or demonstrate DNS availability for every household client. A refreshed Beszel dashboard was subsequently checked, as documented below.
+
+## November 16 follow-up — Beszel dashboard confirms post-reboot recovery
+
+I re-opened Beszel's `home-dns` system after the controlled reboot. The header showed **Up**, with the local socket connection `beszel.sock`, Debian GNU/Linux 13 (Trixie), Cortex-A72, and 3.71 GB RAM. The reported host uptime was about **10 minutes** at capture, consistent with a recent reboot.
+
+The new one-hour dashboard views showed the following **observed** results (approximate screen-read values, not a dataset export):
+
+| Beszel panel | Observation | Conclusion |
+| --- | --- | --- |
+| Host CPU and memory | Continuous host CPU and memory curves; host CPU briefly spiked during restart | Host-level metrics collecting |
+| Docker CPU | Newly populated utilization curves and brief activity spike following restart | Container CPU metrics displayed |
+| Docker Memory | Previously flat at zero, now three colored series totaling approximately 260 MB near capture | **Container memory reporting restored end-to-end** in Beszel |
+| Docker Network I/O | Newly populated incoming and outgoing traffic series | Container network accounting displayed |
+| Root Usage and Root I/O | Root disk usage displayed around 5–6 GB; root throughput showed nonzero I/O peaks | Host storage and I/O panels active |
+| Bandwidth / Load Average | Host traffic and load curves populated | Host network/load panels active |
+| Temperature | CPU thermal sensor plotted around 30–35°C in this view | Temperature sensor reporting (not a long-duration thermal test) |
+| Wi-Fi signal | Interface strength fluctuated approximately −44 to −54 dBm | Wi-Fi monitoring reporting |
+
+The plotted transition after reboot aligns with the `docker stats` result of nonzero memory usage for all three containers. The plots substantiate monitoring recovery at the observed time; the data do **not** establish uninterrupted monitoring across the reboot, alert delivery, precise per-container attribution without inspecting labels, or a production security-detection capability.
+
+**Privacy and provenance:** I reviewed the supplied screenshots, but I have **not** committed their raw image files. The dashboard contains a private Wi-Fi network identifier, so any future image publication requires careful cropping/redaction first. This technical record intentionally does not disclose the SSID, private LAN address, keys or tokens.
 
 ## Verification boundaries and next checks
 
@@ -204,10 +225,10 @@ dig @127.0.0.1 -p 5335 example.com +short
 | Uptime Kuma checks reverified after slim migration | **Verified in November 16 dashboard screenshot** (all four shown Up); public evidence image not yet committed |
 | Backup can be restored into a clean instance | **Not tested** |
 | Beszel hub running and system registered | **Verified** |
-| Beszel agent connected / host metrics collecting | **Verified before reboot** for host CPU and memory. Docker memory accounting **restored at kernel/Docker level after reboot**; refreshed Beszel graphs and disk/network/temperature panels not yet verified |
+| Beszel agent connected / host metrics collecting | **Verified after reboot** for host CPU/memory, Docker CPU/memory/network, root disk/I/O, bandwidth, load, CPU temperature and Wi-Fi signal panels; screenshots inspected but not yet published in sanitized form |
 | Long-term availability, alert delivery or incident-detection capability | **Not demonstrated** |
 
-The next safe follow-up is to inspect refreshed Beszel Docker memory plus disk/network/temperature panels and separately validate any alerting behavior if needed. Native Pi-hole/Unbound DNS service recovery was verified after the reboot. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
+The post-reboot Beszel graphs and native Pi-hole/Unbound DNS checks have passed. Any further monitoring work should focus on sanitized evidence publication, alert delivery testing if desired and longer observation, without repeating the completed cgroup repair. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
 
 ## Why this matters for my security-operations development
 
