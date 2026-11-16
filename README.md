@@ -27,7 +27,7 @@ Raspberry Pi, Linux, DNS, TLS certificate troubleshooting, Docker Engine/Compose
 This is a **scoped conceptual diagram**, not a complete physical network map. The TV-to-Pi-hole link reflects the client attribution documented in the October 15 investigation. The downstream filtering branch illustrates conditional blocking; the Unbound path below is supported by a separately observed forwarded DNS request, not a complete client-by-client path audit.
 
 ```mermaid
-flowchart LR
+flowchart TB
     TV["Insignia smart TV (identified client)"] -->|"DNS queries observed"| PH["Pi-hole on Raspberry Pi 400"]
     PH -->|"Observed forwarded test query"| UB["Unbound: localhost port 5335"]
     UB -->|"Recursive resolution"| AUTH["Authoritative DNS hierarchy"]
