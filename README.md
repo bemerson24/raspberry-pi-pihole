@@ -46,7 +46,7 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Windows 11 / WSL2 DNS behavior with Bitdefender VPN and Pi-hole — November 15, 2026](case-studies/wsl2-bitdefender-pihole-dns-2026-11-15.md): controlled VPN-state comparison using Windows DNS over TCP, standard lookups, WSL2 unique-hostname probes and Pi-hole query-log evidence. VPN-state effects observed; exact DNS redirection/filtering mechanism unverified.
 
-- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A November 16 post-migration dashboard screenshot verified all three original monitors Up, plus the Uptime Kuma self-check; Beszel host CPU and memory graphs were also verified; November 16 kernel cgroup memory repair restored actual Docker per-container memory readings. Native Pi-hole and Unbound direct local DNS queries passed after reboot, and the refreshed Beszel dashboard showed populated Docker memory/CPU/network, disk, temperature and Wi-Fi data. Public evidence screenshots and alert-delivery testing remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
+- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A November 16 post-migration dashboard screenshot verified all three original monitors Up, plus the Uptime Kuma self-check; Beszel host CPU and memory graphs were also verified; November 16 kernel cgroup memory repair restored actual Docker per-container memory readings. Native Pi-hole and Unbound direct local DNS queries passed after reboot, and the refreshed Beszel dashboard showed populated Docker memory/CPU/network, disk, temperature and Wi-Fi data. Four privacy-reviewed [Beszel dashboard evidence images](evidence/beszel/README.md) are now published; the Uptime Kuma capture remains unpublished and alert delivery is still untested. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
 
 ## Evidence collection
 
@@ -65,7 +65,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 - [x] Resolve missing Docker memory accounting: traced `0B / 0B` reports to boot-time `cgroup_disable=memory`, backed up and appended `cgroup_enable=memory`, rebooted, and verified nonzero memory usage for all three containers.
 - [x] Verify Pi-hole/Unbound post-reboot recovery: both services active; direct local lookups against Pi-hole and Unbound port 5335 returned A records.
 - [x] Verify refreshed Beszel dashboard after reboot: Docker CPU/memory/network, host disk/I/O, bandwidth/load, thermal and Wi-Fi signal panels populated.
-- [ ] Publish selected, privacy-reviewed dashboard evidence if useful; validate alert delivery and longer-term retention separately before claiming them.
+- [x] Publish four privacy-reviewed Beszel monitoring screenshots with provenance notes (November 16).
+- [ ] Publish a privacy-reviewed Uptime Kuma image if useful; independently test alert delivery, clean backup restoration and longer-term retention before making those claims.
 
 The case studies contain my recorded results. The November 11 Pi-hole component versions are documented; matched TV query measurements remain unfinished.
 
