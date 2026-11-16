@@ -1,7 +1,7 @@
 # Case Study: Adding Docker-Based Monitoring to My Pi-hole Raspberry Pi
 
 **Dates:** November 15–16, 2026 (Pacific time)  
-**Status as of November 16:** Pi-hole forwarding to Unbound confirmed; Uptime Kuma slim image deployed; Beszel Hub and Agent connected with live CPU and Docker CPU metrics. Extended history and some sensor readings remain to be checked.  
+**Status as of November 16:** Pi-hole forwarding to Unbound confirmed; Uptime Kuma slim image deployed and monitors rechecked; Beszel Hub and Agent connected with live host CPU and memory graphs. Container-level Docker metrics and some other hardware panels still need verification.  
 **Project:** Existing Raspberry Pi 400 home-DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
@@ -103,9 +103,9 @@ The Agent initially entered a restart loop with exit code 1. Its logs specifical
 
 I corrected the private environment-file structure, kept the file permission at `600`, and successfully ran `sudo docker compose config --quiet`. I then recreated only the Agent with `sudo docker compose up -d --no-deps --force-recreate beszel-agent`. The next `docker compose ps` output showed both `beszel` and `beszel-agent` **Up**, with the Agent still up at a subsequent three-minute check.
 
-A later Beszel dashboard screenshot showed the `home-dns` system **Up** using `beszel.sock`, with Debian GNU/Linux 13 (Trixie), Cortex-A72, approximately 3.71 GB RAM and 34 days host uptime. Live CPU and Docker CPU graphs had begun to populate: system CPU briefly spiked to approximately 29% in the small sample and then fell near idle; the visible Docker CPU plot remained near zero.
+A later Beszel dashboard screenshot showed the `home-dns` system **Up** using `beszel.sock`, with Debian GNU/Linux 13 (Trixie), Cortex-A72, approximately 3.71 GB RAM and 34 days host uptime. Live host CPU readings began to populate: system CPU briefly spiked to approximately 29% in the small sample and then fell near idle; the visible Docker CPU plot remained near zero. That first image did not establish successful collection of per-container metrics.
 
-**Verified:** Agent process stability over the observed interval, successful Hub-to-Agent connection, reported system metadata, and initial CPU metrics. **Not yet verified from the provided cropped screenshot:** complete memory, disk, temperature and network metric graphs, alert delivery, long-term retention, or the three Uptime Kuma monitors in a new post-slim dashboard capture. I did not publish the real Agent key, token, private `.env` file, or raw configuration.
+**Verified:** Agent process stability over the observed interval, successful Hub-to-Agent connection, reported system metadata, and initial CPU metrics. **Not yet verified from that first cropped screenshot:** complete memory, disk, temperature and network metric graphs, alert delivery, long-term retention, or a post-slim Uptime Kuma capture. Later screenshots address some of these items below. I did not publish the real Agent key, token, private `.env` file, or raw configuration.
 
 ## November 16 follow-up — Uptime Kuma monitors reverified after slim-image migration
 
@@ -115,7 +115,18 @@ The selected **Pi-hole DNS Resolution** monitor was **Up**, querying `example.co
 
 **Interpretation:** This screenshot demonstrates the monitor configuration and a functioning DNS check **after** the slim-image migration, together with currently Up status for the other three displayed monitors. The interface's reported 24-hour / 30-day / 1-year 100% values do **not** independently prove continuous monitoring over those entire periods. This is **not** a clean restore test, a measurement of alert delivery, or security-event detection.
 
-**Evidence handling:** The screenshot was inspected during the investigation; a sanitized copy is **not yet committed to this repository**. It remains a session observation rather than a publicly archived image. Beszel memory/disk/network/temperature graphs and alert delivery remain outstanding.
+**Evidence handling:** The screenshot was inspected during the investigation; a sanitized copy is **not yet committed to this repository**. It remains a session observation rather than a publicly archived image. Beszel resource details are assessed in the following follow-up; disk/network/temperature graphs and alert delivery remain outstanding.
+
+## November 16 follow-up — Beszel CPU and memory panels
+
+I revisited Beszel's `home-dns` dashboard and captured its one-hour view. The system remained **Up** over the local Unix socket `beszel.sock`. The page identified Debian GNU/Linux 13 (Trixie), Cortex-A72, **3.71 GB** system memory and approximately **34 days** of host uptime.
+
+- **Host CPU Usage:** A populated timeline showed roughly **0.7–0.9%** system-wide utilization through most of the visible interval, with a brief peak near **1.8%**. These are screen-read approximations, not exported samples.
+- **Host Memory Usage:** A populated, nearly flat memory chart appeared. This verifies collection and display of host memory data; its colored bands were not independently decoded into an exact used/free memory amount.
+- **Docker CPU Usage and Docker Memory Usage:** Both charts were visible but appeared **flat at zero**. This is **not** sufficient to conclude that per-container metrics are correctly collected, that no container resources were consumed, or that the Agent is broken. Container-level monitoring remains to be checked against an independent observation.
+- **Disk, network, temperature:** Not visible in this screenshot, and therefore not yet verified from it.
+
+The screenshot provides stronger evidence of operational **host** monitoring than the earlier cropped view, but it does not validate alert delivery, long-term retention, per-container resource accounting, or any security-event detection. The screenshot has been reviewed in the working session but **not published as a sanitized artifact**.
 
 ## Verification boundaries and next checks
 
@@ -129,10 +140,10 @@ The selected **Pi-hole DNS Resolution** monitor was **Up**, querying `example.co
 | Uptime Kuma checks reverified after slim migration | **Verified in November 16 dashboard screenshot** (all four shown Up); public evidence image not yet committed |
 | Backup can be restored into a clean instance | **Not tested** |
 | Beszel hub running and system registered | **Verified** |
-| Beszel agent connected / host metrics collecting | **Verified in November 16 follow-up** for CPU and Docker CPU; additional hardware graphs not yet verified |
+| Beszel agent connected / host metrics collecting | **Verified** for host CPU and memory in November 16 dashboard; Docker CPU/memory panels show flat zero and need independent corroboration; disk/network/temperature not yet verified |
 | Long-term availability, alert delivery or incident-detection capability | **Not demonstrated** |
 
-The next safe follow-up is to inspect Beszel's memory, disk, network and temperature panels, and separately validate any alerting behavior if needed. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
+The next safe follow-up is to inspect Beszel's disk, network and temperature panels, independently check whether Docker resource metrics should be nonzero, and separately validate any alerting behavior if needed. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
 
 ## Why this matters for my security-operations development
 
