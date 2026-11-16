@@ -107,6 +107,16 @@ A later Beszel dashboard screenshot showed the `home-dns` system **Up** using `b
 
 **Verified:** Agent process stability over the observed interval, successful Hub-to-Agent connection, reported system metadata, and initial CPU metrics. **Not yet verified from the provided cropped screenshot:** complete memory, disk, temperature and network metric graphs, alert delivery, long-term retention, or the three Uptime Kuma monitors in a new post-slim dashboard capture. I did not publish the real Agent key, token, private `.env` file, or raw configuration.
 
+## November 16 follow-up — Uptime Kuma monitors reverified after slim-image migration
+
+After the earlier `louislam/uptime-kuma:2-slim` migration, I revisited the Uptime Kuma dashboard and captured a screenshot. **All four displayed monitors were green, showed 100% in the dashboard's reported periods, and displayed current green history bars:** Uptime Kuma (self-check), Home Router, Internet Connectivity, and Pi-hole DNS Resolution.
+
+The selected **Pi-hole DNS Resolution** monitor was **Up**, querying `example.com` for an A record every **60 seconds**. The latest result showed IPv4 answers `104.20.23.154` and `172.66.147.243`, a **2 ms** current response and **4.19 ms** displayed average. Its visible green-bar timeline covered approximately **28 minutes**.
+
+**Interpretation:** This screenshot demonstrates the monitor configuration and a functioning DNS check **after** the slim-image migration, together with currently Up status for the other three displayed monitors. The interface's reported 24-hour / 30-day / 1-year 100% values do **not** independently prove continuous monitoring over those entire periods. This is **not** a clean restore test, a measurement of alert delivery, or security-event detection.
+
+**Evidence handling:** The screenshot was inspected during the investigation; a sanitized copy is **not yet committed to this repository**. It remains a session observation rather than a publicly archived image. Beszel memory/disk/network/temperature graphs and alert delivery remain outstanding.
+
 ## Verification boundaries and next checks
 
 | Claim | Status on November 15 |
@@ -116,13 +126,13 @@ A later Beszel dashboard screenshot showed the `home-dns` system **Up** using `b
 | Three Uptime Kuma checks showed Up | **Verified snapshot before image migration** |
 | Uptime Kuma application-state archive and transferred copy intact | **Verified** gzip test, expected entries and matching SHA-256 |
 | Slim Uptime Kuma image started; old image removed | **Verified**, with before/after disk-space observations |
-| Uptime Kuma checks reverified after slim migration | **Not independently archived** |
+| Uptime Kuma checks reverified after slim migration | **Verified in November 16 dashboard screenshot** (all four shown Up); public evidence image not yet committed |
 | Backup can be restored into a clean instance | **Not tested** |
 | Beszel hub running and system registered | **Verified** |
-| Beszel agent connected / host metrics collecting | **Not complete** |
+| Beszel agent connected / host metrics collecting | **Verified in November 16 follow-up** for CPU and Docker CPU; additional hardware graphs not yet verified |
 | Long-term availability, alert delivery or incident-detection capability | **Not demonstrated** |
 
-A safe follow-up is to verify the three monitors again after the image switch, separately deploy and validate the Beszel agent with its credentials kept outside Git, and capture only sanitized dashboard evidence. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
+The next safe follow-up is to inspect Beszel's memory, disk, network and temperature panels, and separately validate any alerting behavior if needed. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
 
 ## Why this matters for my security-operations development
 
