@@ -16,7 +16,7 @@ I deployed Pi-hole on a Raspberry Pi 400 and investigated DNS-query patterns, VP
 - Configured Unbound as Pi-hole's sole upstream at `127.0.0.1#5335`; tested DNSSEC's valid/invalid responses and captured Pi-hole's actual `en.wikipedia.org` forwarding log.
 - Verified Docker Engine 29.9.3 and Docker Compose v5.7.1 on the Pi. Deployed Uptime Kuma with three checks for the home router, internet reachability and Pi-hole DNS resolution; all were Up in the observed monitoring snapshot.
 - Validated a Uptime Kuma data backup (gzip integrity, expected SQLite/config entries and matching checksum after transfer to Windows), then switched to the `2-slim` Docker image and removed the larger image. Available storage increased from roughly 6.3 GB to 8.1 GB.
-- Deployed the Beszel Hub and Agent in Docker and verified `home-dns` Up with populated **host CPU and memory** charts. I corrected a public-key placeholder and malformed `.env` entry before the Agent connected. Docker memory accounting initially failed because the kernel's memory cgroup controller was disabled; after a backed-up boot override and controlled reboot, refreshed Beszel graphs verified container CPU/memory/network monitoring alongside host storage, bandwidth and temperature panels.
+- Deployed the Beszel Hub and Agent in Docker and verified the Pi-hole host Up with populated **host CPU and memory** charts. I corrected a public-key placeholder and malformed `.env` entry before the Agent connected. Docker memory accounting initially failed because the kernel's memory cgroup controller was disabled; after a backed-up boot override and controlled reboot, refreshed Beszel graphs verified container CPU/memory/network monitoring alongside host storage, bandwidth and temperature panels.
 
 ## Skills
 

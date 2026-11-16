@@ -2,7 +2,7 @@
 
 **Dates:** November 15–16, 2026 (Pacific time)  
 **Status as of November 16:** Pi-hole-to-Unbound forwarding previously confirmed; post-reboot native DNS tests passed; Uptime Kuma slim image deployed and monitoring checks reverified. Beszel Hub/Agent reporting and a cgroup memory controller repair were validated with both nonzero Docker memory statistics and refreshed Beszel Docker CPU, memory and network graphs. Root storage, I/O, temperature, system load and Wi-Fi signal panels also populated. Four privacy-reviewed Beszel dashboard screenshots are now published; the Uptime Kuma screenshot remains unpublished.  
-**Project:** Existing Raspberry Pi 400 home-DNS server, not a new lab or a production SOC environment
+**Project:** Existing Raspberry Pi 400 DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
 
@@ -20,7 +20,7 @@ I also needed to account for the Pi's limited microSD storage and protect the Up
 | Operating system | Debian 13.7 / Trixie |
 | Memory | Approximately 3.7 GiB available to the system |
 | Storage | Approximately 15 GiB microSD filesystem |
-| Host | `home-dns` (local hostname; private LAN address omitted) |
+| Host | Raspberry Pi DNS host (local hostname and LAN address withheld) |
 | Networking | Wi-Fi (`wlan0`); local router and Pi-hole addresses redacted in this public report |
 | Pi-hole | Existing **native host service**, not moved into Docker |
 | Unbound | Existing recursive resolver active on `127.0.0.1:5335` |
@@ -87,8 +87,8 @@ I also deployed the Beszel **Hub** container, based on `henrygd/beszel:latest`, 
 
 - The hub container was observed **running**; its interface reported version **0.21.2**.
 - Container mount locations `/beszel_data` and `/beszel_socket` were verified.
-- I added/registered the `home-dns` system in the hub interface.
-- The dashboard initially displayed no systems. Subsequently, the registered `home-dns` system was **Down/pending**.
+- I registered the Pi-hole host as a system in the hub interface.
+- The dashboard initially displayed no systems. Subsequently, the registered Pi-hole host was **Down/pending**.
 - A container inventory showed **only the `beszel` hub container**: the **Beszel agent was not installed or running** in the verified session.
 
 **November 15 open issue (resolved November 16):** At this point the Hub alone could not report host metrics. The Agent was not yet operational. See the dated follow-up below. Agent credentials must remain in private configuration, never in Git.
@@ -103,7 +103,7 @@ The Agent initially entered a restart loop with exit code 1. Its logs specifical
 
 I corrected the private environment-file structure, kept the file permission at `600`, and successfully ran `sudo docker compose config --quiet`. I then recreated only the Agent with `sudo docker compose up -d --no-deps --force-recreate beszel-agent`. The next `docker compose ps` output showed both `beszel` and `beszel-agent` **Up**, with the Agent still up at a subsequent three-minute check.
 
-A later Beszel dashboard screenshot showed the `home-dns` system **Up** using `beszel.sock`, with Debian GNU/Linux 13 (Trixie), Cortex-A72, approximately 3.71 GB RAM and 34 days host uptime. Live host CPU readings began to populate: system CPU briefly spiked to approximately 29% in the small sample and then fell near idle; the visible Docker CPU plot remained near zero. That first image did not establish successful collection of per-container metrics.
+A later Beszel dashboard screenshot showed the monitored Pi-hole host **Up** using `beszel.sock`, with Debian GNU/Linux 13 (Trixie), Cortex-A72, approximately 3.71 GB RAM and 34 days host uptime. Live host CPU readings began to populate: system CPU briefly spiked to approximately 29% in the small sample and then fell near idle; the visible Docker CPU plot remained near zero. That first image did not establish successful collection of per-container metrics.
 
 **Verified:** Agent process stability over the observed interval, successful Hub-to-Agent connection, reported system metadata, and initial CPU metrics. **Not yet verified from that first cropped screenshot:** complete memory, disk, temperature and network metric graphs, alert delivery, long-term retention, or a post-slim Uptime Kuma capture. Later screenshots address some of these items below. I did not publish the real Agent key, token, private `.env` file, or raw configuration.
 
@@ -119,7 +119,7 @@ The selected **Pi-hole DNS Resolution** monitor was **Up**, querying `example.co
 
 ## November 16 follow-up — Beszel CPU and memory panels
 
-I revisited Beszel's `home-dns` dashboard and captured its one-hour view. The system remained **Up** over the local Unix socket `beszel.sock`. The page identified Debian GNU/Linux 13 (Trixie), Cortex-A72, **3.71 GB** system memory and approximately **34 days** of host uptime.
+I revisited Beszel's dashboard for the Pi-hole host and captured its one-hour view. The system remained **Up** over the local Unix socket `beszel.sock`. The page identified Debian GNU/Linux 13 (Trixie), Cortex-A72, **3.71 GB** system memory and approximately **34 days** of host uptime.
 
 - **Host CPU Usage:** A populated timeline showed roughly **0.7–0.9%** system-wide utilization through most of the visible interval, with a brief peak near **1.8%**. These are screen-read approximations, not exported samples.
 - **Host Memory Usage:** A populated, nearly flat memory chart appeared. This verifies collection and display of host memory data; its colored bands were not independently decoded into an exact used/free memory amount.
@@ -194,7 +194,7 @@ dig @127.0.0.1 -p 5335 example.com +short
 
 ## November 16 follow-up — Beszel dashboard confirms post-reboot recovery
 
-I re-opened Beszel's `home-dns` system after the controlled reboot. The header showed **Up**, with the local socket connection `beszel.sock`, Debian GNU/Linux 13 (Trixie), Cortex-A72, and 3.71 GB RAM. The reported host uptime was about **10 minutes** at capture, consistent with a recent reboot.
+I re-opened Beszel's monitored Pi-hole host after the controlled reboot. The header showed **Up**, with the local socket connection `beszel.sock`, Debian GNU/Linux 13 (Trixie), Cortex-A72, and 3.71 GB RAM. The reported host uptime was about **10 minutes** at capture, consistent with a recent reboot.
 
 The new one-hour dashboard views showed the following **observed** results (approximate screen-read values, not a dataset export):
 
@@ -211,11 +211,11 @@ The new one-hour dashboard views showed the following **observed** results (appr
 
 The plotted transition after reboot aligns with the `docker stats` result of nonzero memory usage for all three containers. The plots substantiate monitoring recovery at the observed time; the data do **not** establish uninterrupted monitoring across the reboot, alert delivery, precise per-container attribution without inspecting labels, or a production security-detection capability.
 
-**Privacy and provenance:** The original screenshots remain private. I published four privacy-reviewed copies, preserving the actual plotted data. In the fourth image I obscured the private Wi-Fi SSID with an opaque mask and cropped out an incomplete container table containing a private LAN address. The source files, editing scope and SHA-256 hashes are documented in the [Beszel evidence notes](../evidence/beszel/README.md). I did not redraw chart lines, fabricate measurements, or disclose credentials.
+**Privacy and provenance:** The original screenshots remain private. I published four privacy-reviewed copies, preserving the actual plotted data. In the first image I obscured the local hostname with an opaque mask; in the fourth image I obscured the private Wi-Fi SSID and cropped out an incomplete container table containing a private LAN address. The source files, editing scope and SHA-256 hashes are documented in the [Beszel evidence notes](../evidence/beszel/README.md). I did not redraw chart lines, fabricate measurements, or disclose credentials.
 
 ### Published Beszel dashboard evidence — November 16
 
-The captured panels cover a selected approximately **11:40 AM–12:40 PM Pacific one-hour view**, not a demonstrated period of uninterrupted uptime. They show `home-dns` Up, populated host and Docker CPU timelines, nonzero container memory, and active storage, network, load, temperature and Wi-Fi charts. These are dashboard observations, not exported raw telemetry or independent proof that every background service or household DNS client was continuously healthy.
+The captured panels cover a selected approximately **11:40 AM–12:40 PM Pacific one-hour view**, not a demonstrated period of uninterrupted uptime. They show the Pi-hole host Up, populated host and Docker CPU timelines, nonzero container memory, and active storage, network, load, temperature and Wi-Fi charts. These are dashboard observations, not exported raw telemetry or independent proof that every background service or household DNS client was continuously healthy.
 
 - [01 — Beszel host and Docker CPU, with host memory](../evidence/beszel/01-beszel-host-and-docker-cpu-2026-11-16.png)
 - [02 — Docker memory, root disk usage and root I/O](../evidence/beszel/02-beszel-docker-memory-and-storage-2026-11-16.png)
