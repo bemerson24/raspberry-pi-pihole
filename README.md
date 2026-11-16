@@ -48,12 +48,12 @@ Other household clients and potential alternate DNS paths are not inventoried in
 ## Documentation roadmap
 
 - [x] Add a scoped logical DNS-flow diagram (not a full network topology).
-- [ ] Document software versions.
+- [x] Record observed software versions (Pi-hole Core v6.4.3, Web v6.6, FTL v6.7.1 as of November 11, 2026); recheck before claiming these are current.
 - [x] Add case studies with command results and dated observations.
 - [ ] Collect matched per-client DNS measurements for the TV follow-up.
 - [x] Record troubleshooting lessons and unresolved questions.
 
-The case studies contain the recorded results. Software versions and matched TV query measurements still need documentation.
+The case studies contain my recorded results. The November 11 Pi-hole component versions are documented; matched TV query measurements remain unfinished.
 
 ## Scope
 
