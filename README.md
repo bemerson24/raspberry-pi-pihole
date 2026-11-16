@@ -6,13 +6,13 @@
 
 **Portfolio overview:** [View the cybersecurity portfolio](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/PORTFOLIO-OVERVIEW.md).
 
-Pi-hole deployment on a Raspberry Pi 400, with DNS-query investigations, VPN/local DNS comparisons and HTTPS dashboard troubleshooting. This environment is separate from the VirtualBox lab and Ubuntu WSL 2 assessment.
+I deployed Pi-hole on a Raspberry Pi 400 and have investigated DNS-query patterns, VPN-dependent resolver behavior, and HTTPS dashboard access. This is my home DNS project, separate from my VirtualBox lab and Ubuntu WSL 2 assessment.
 
 ## Project work
 
-- Set up Pi-hole on a Raspberry Pi 400.
+- Configured Pi-hole on my Raspberry Pi 400.
 - Investigated local DNS resolution and VPN-dependent lookup behavior.
-- Documented DNS-query observations, HTTPS recovery and unresolved causes.
+- Documented DNS-query observations, HTTPS recovery, and unresolved causes.
 
 ## Skills
 
