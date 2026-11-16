@@ -115,7 +115,7 @@ The selected **Pi-hole DNS Resolution** monitor was **Up**, querying `example.co
 
 **Interpretation:** This screenshot demonstrates the monitor configuration and a functioning DNS check **after** the slim-image migration, together with currently Up status for the other three displayed monitors. The interface's reported 24-hour / 30-day / 1-year 100% values do **not** independently prove continuous monitoring over those entire periods. This is **not** a clean restore test, a measurement of alert delivery, or security-event detection.
 
-**Evidence handling:** The screenshot was inspected during the investigation; a sanitized copy is **not yet committed to this repository**. It remains a session observation rather than a publicly archived image. Beszel resource details are assessed in the following follow-up; disk/network/temperature graphs and alert delivery remain outstanding.
+**Evidence handling:** The screenshot was inspected during the investigation; a sanitized copy is **not yet committed to this repository**. It remains a session observation rather than a publicly archived image. Disk/network/temperature graphs were still unverified at this point in the sequence and were subsequently checked in the post-reboot follow-up below. Alert delivery remains untested.
 
 ## November 16 follow-up — Beszel CPU and memory panels
 
@@ -215,7 +215,7 @@ The plotted transition after reboot aligns with the `docker stats` result of non
 
 ## Verification boundaries and next checks
 
-| Claim | Status on November 15 |
+| Claim | Status as of November 16 |
 | --- | --- |
 | Docker Engine / Compose available | **Verified** by version and service checks |
 | Existing Pi-hole / Unbound local DNS working after maintenance | **Verified** by status and local DNS query |

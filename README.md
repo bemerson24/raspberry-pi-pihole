@@ -59,7 +59,7 @@ Other household clients and potential alternate DNS paths are not inventoried in
 - [x] Add case studies with command results and dated observations.
 - [ ] Collect matched per-client DNS measurements for the TV follow-up.
 - [x] Record troubleshooting lessons and unresolved questions.
-- [x] Document tonight's Docker installation, Uptime Kuma availability checks, backup integrity and image-size optimization as an existing-host extension.
+- [x] Document the November 15 Docker installation, Uptime Kuma availability checks, backup integrity and image-size optimization as an existing-host extension.
 - [x] Deploy the Beszel Agent and verify Hub connectivity with populated host CPU and memory metrics, keeping credentials private.
 - [x] Recheck the original three Uptime Kuma monitors after the slim-image migration (all Up in November 16 dashboard, alongside Uptime Kuma self-check).
 - [x] Resolve missing Docker memory accounting: traced `0B / 0B` reports to boot-time `cgroup_disable=memory`, backed up and appended `cgroup_enable=memory`, rebooted, and verified nonzero memory usage for all three containers.
