@@ -6,16 +6,17 @@
 
 **Portfolio overview:** [View the cybersecurity portfolio](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/PORTFOLIO-OVERVIEW.md).
 
-I deployed Pi-hole on a Raspberry Pi 400 and investigated DNS-query patterns, VPN-dependent resolver behavior, and HTTPS dashboard access. On November 15, I added Docker-based availability monitoring with Uptime Kuma and began adding host visibility through Beszel. Pi-hole and Unbound remained native services. This is my home DNS and monitoring project, separate from my VirtualBox lab and Ubuntu WSL 2 assessment.
+I deployed Pi-hole on a Raspberry Pi 400 and investigated DNS-query patterns, VPN-dependent resolver behavior, and HTTPS dashboard access. On November 15–16, I added Docker-based availability monitoring with Uptime Kuma and connected Beszel host monitoring, while keeping Pi-hole and Unbound native. I verified Pi-hole forwarding to Unbound through an actual DNS query-log entry and documented a Beszel Agent configuration failure and recovery. This is my home DNS and monitoring project, separate from my VirtualBox lab and Ubuntu WSL 2 assessment.
 
 ## Project work
 
 - Configured Pi-hole on my Raspberry Pi 400.
 - Investigated local DNS resolution and VPN-dependent lookup behavior.
 - Documented DNS-query observations, HTTPS recovery, and unresolved causes.
+- Configured Unbound as Pi-hole's sole upstream at `127.0.0.1#5335`; tested DNSSEC's valid/invalid responses and captured Pi-hole's actual `en.wikipedia.org` forwarding log.
 - Verified Docker Engine 29.9.3 and Docker Compose v5.7.1 on the Pi. Deployed Uptime Kuma with three checks for the home router, internet reachability and Pi-hole DNS resolution; all were Up in the observed monitoring snapshot.
 - Validated a Uptime Kuma data backup (gzip integrity, expected SQLite/config entries and matching checksum after transfer to Windows), then switched to the `2-slim` Docker image and removed the larger image. Available storage increased from roughly 6.3 GB to 8.1 GB.
-- Deployed the Beszel hub and registered the Pi as a system. **Agent installation and metric reporting remain unfinished**; I have not represented the hub alone as operational host monitoring.
+- Deployed the Beszel Hub and Agent in Docker, verified both containers running and the `home-dns` system Up, and observed the first system CPU and Docker CPU graphs. I corrected a public-key placeholder and malformed `.env` entry before the Agent connected. Other hardware sensor charts and extended history remain to be verified.
 
 ## Skills
 
@@ -23,12 +24,13 @@ Raspberry Pi, Linux, DNS, TLS certificate troubleshooting, Docker Engine/Compose
 
 ## Logical DNS flow
 
-This is a **scoped conceptual diagram**, not a complete physical network map. The TV-to-Pi-hole link reflects the client attribution documented in the October 15 investigation. The downstream branches illustrate possible DNS filtering behavior; the actual upstream DNS configuration and individual response outcomes are not yet documented.
+This is a **scoped conceptual diagram**, not a complete physical network map. The TV-to-Pi-hole link reflects the client attribution documented in the October 15 investigation. The downstream filtering branch illustrates conditional blocking; the Unbound path below is supported by a separately observed forwarded DNS request, not a complete client-by-client path audit.
 
 ```mermaid
 flowchart LR
     TV["Insignia smart TV (identified client)"] -->|"DNS queries observed"| PH["Pi-hole on Raspberry Pi 400"]
-    PH -.->|"Upstream settings to verify"| UP["Upstream DNS resolver"]
+    PH -->|"Observed forwarded test query"| UB["Unbound: localhost port 5335"]
+    UB -->|"Recursive resolution"| AUTH["Authoritative DNS hierarchy"]
     PH -->|"When a blocking rule matches"| BLOCK["DNS block response"]
 ```
 
@@ -44,7 +46,7 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Windows 11 / WSL2 DNS behavior with Bitdefender VPN and Pi-hole — November 15, 2026](case-studies/wsl2-bitdefender-pihole-dns-2026-11-15.md): controlled VPN-state comparison using Windows DNS over TCP, standard lookups, WSL2 unique-hostname probes and Pi-hole query-log evidence. VPN-state effects observed; exact DNS redirection/filtering mechanism unverified.
 
-- **[Docker, Uptime Kuma and Beszel monitoring — November 15, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, the three Uptime Kuma checks, a checked and transferred backup, a storage-conscious slim-image migration, and a running Beszel hub. The Beszel agent and post-migration monitor verification remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
+- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A post-migration screenshot of all three Uptime Kuma monitors and additional Beszel charts remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
 
 ## Evidence collection
 
@@ -58,7 +60,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 - [ ] Collect matched per-client DNS measurements for the TV follow-up.
 - [x] Record troubleshooting lessons and unresolved questions.
 - [x] Document tonight's Docker installation, Uptime Kuma availability checks, backup integrity and image-size optimization as an existing-host extension.
-- [ ] Verify Uptime Kuma checks again after the slim-image migration; separately deploy and validate the Beszel agent and its actual host metrics without publishing credentials.
+- [x] Deploy the Beszel Agent and verify Hub connectivity with live CPU and Docker CPU metrics, keeping credentials private.
+- [ ] Recheck all three Uptime Kuma monitors after the slim-image migration, inspect the remaining Beszel temperature/memory/disk/network charts and consider sanitized evidence for publication.
 
 The case studies contain my recorded results. The November 11 Pi-hole component versions are documented; matched TV query measurements remain unfinished.
 
