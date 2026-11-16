@@ -1,7 +1,7 @@
 # Case Study: Adding Docker-Based Monitoring to My Pi-hole Raspberry Pi
 
 **Dates:** November 15–16, 2026 (Pacific time)  
-**Status as of November 16:** Pi-hole forwarding to Unbound previously confirmed; Uptime Kuma slim image deployed and monitors rechecked; Beszel Hub/Agent connected with host CPU and memory graphs. I traced zero-valued Docker container memory statistics to a disabled kernel cgroup memory controller, enabled it through a backed-up boot-parameter change, rebooted, and verified nonzero per-container memory reporting. Post-reboot Pi-hole/Unbound and refreshed Beszel dashboard checks remain pending.  
+**Status as of November 16:** Pi-hole forwarding to Unbound previously confirmed; Uptime Kuma slim image deployed and monitors rechecked; Beszel Hub/Agent connected with host CPU and memory graphs. I traced zero-valued Docker container memory statistics to a disabled kernel cgroup memory controller, enabled it through a backed-up boot-parameter change, rebooted, and verified nonzero per-container memory reporting. Post-reboot Pi-hole and Unbound active-service status and local DNS answers are now verified; refreshed Beszel dashboard checks remain pending.  
 **Project:** Existing Raspberry Pi 400 home-DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
@@ -170,7 +170,27 @@ cpuset cpu io memory pids
 
 All three containers appeared in the stats output with nonzero memory readings. The observed network/block I/O values also showed activity for some containers. These values are **one post-reboot sample**, not sustained load measurements.
 
-**Disposition:** The explicitly disabled kernel memory cgroup controller was the evidence-supported cause of Docker reporting `0B / 0B` memory for every container. The override successfully restored kernel memory-controller availability and Docker memory accounting. A refreshed Beszel dashboard after this reboot has **not yet been inspected** to establish whether its per-container graphs now populate. Pi-hole and Unbound service recovery also require an explicit post-reboot check; Docker stats by itself does not prove DNS service health. No secrets or LAN addresses were included in this report.
+**Disposition:** The explicitly disabled kernel memory cgroup controller was the evidence-supported cause of Docker reporting `0B / 0B` memory for every container. The override successfully restored kernel memory-controller availability and Docker memory accounting. A refreshed Beszel dashboard after this reboot has **not yet been inspected** to establish whether its per-container graphs now populate. Pi-hole and Unbound service recovery was subsequently tested by service status and direct local DNS queries as documented below; Docker stats alone did not establish DNS service health. No secrets or LAN addresses were included in this report.
+
+## November 16 follow-up — Native DNS recovery verified after reboot
+
+After the cgroup memory controller repair and reboot, I checked the two native DNS services and sent individual DNS lookups to their local listeners:
+
+```text
+sudo systemctl is-active pihole-FTL unbound
+active
+active
+
+dig @127.0.0.1 example.com +short
+104.20.23.154
+172.66.147.243
+
+dig @127.0.0.1 -p 5335 example.com +short
+172.66.147.243
+104.20.23.154
+```
+
+**Result:** Both `pihole-FTL` and `unbound` were active and both local resolvers returned A records for `example.com` after reboot. The differing order of returned addresses is not a failure. This validates each service's local lookup path at the time of observation. The earlier, separate Pi-hole forwarding log established that a specific query was forwarded to Unbound; the two direct queries here do not independently trace the forwarding path or demonstrate DNS availability for every household client. A refreshed Beszel dashboard after the reboot remains to be checked.
 
 ## Verification boundaries and next checks
 
@@ -187,7 +207,7 @@ All three containers appeared in the stats output with nonzero memory readings. 
 | Beszel agent connected / host metrics collecting | **Verified before reboot** for host CPU and memory. Docker memory accounting **restored at kernel/Docker level after reboot**; refreshed Beszel graphs and disk/network/temperature panels not yet verified |
 | Long-term availability, alert delivery or incident-detection capability | **Not demonstrated** |
 
-The next safe follow-up is to verify native Pi-hole/Unbound DNS after the reboot, inspect refreshed Beszel Docker memory plus disk/network/temperature panels, and separately validate any alerting behavior if needed. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
+The next safe follow-up is to inspect refreshed Beszel Docker memory plus disk/network/temperature panels and separately validate any alerting behavior if needed. Native Pi-hole/Unbound DNS service recovery was verified after the reboot. Capture sanitized monitoring evidence before publishing. The agent is already connected and the Uptime Kuma monitors have been rechecked; neither needs to be redeployed simply to repeat the completed work. I will not change the working Pi-hole/Unbound DNS setup or present an availability monitor as a security detection system.
 
 ## Why this matters for my security-operations development
 
