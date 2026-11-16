@@ -89,4 +89,4 @@ Potential next investigation: correlate timestamped packet capture or Pi-hole FT
 
 This project demonstrates controlled A/B testing, protocol-aware DNS troubleshooting, Linux/Windows interoperability, client/server evidence correlation, and the difference between an observed outcome and an inferred network path.
 
-*I used writing assistance to organize the commands, outputs, and screenshots from my investigation. I have not presented any packet-level routing mechanism as verified.*
+*Documentation note: I used writing assistance to organize this report from the commands, results and screenshots I reviewed during my investigation. I distinguish observed results from interpretations and unfinished tests; writing assistance is not evidence of a technical result.*
