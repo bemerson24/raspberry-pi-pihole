@@ -6,17 +6,20 @@
 
 **Portfolio overview:** [View the cybersecurity portfolio](https://github.com/bemerson24/cybersecurity-virtual-lab-environment/blob/main/PORTFOLIO-OVERVIEW.md).
 
-I deployed Pi-hole on a Raspberry Pi 400 and have investigated DNS-query patterns, VPN-dependent resolver behavior, and HTTPS dashboard access. This is my home DNS project, separate from my VirtualBox lab and Ubuntu WSL 2 assessment.
+I deployed Pi-hole on a Raspberry Pi 400 and investigated DNS-query patterns, VPN-dependent resolver behavior, and HTTPS dashboard access. On November 15, I added Docker-based availability monitoring with Uptime Kuma and began adding host visibility through Beszel. Pi-hole and Unbound remained native services. This is my home DNS and monitoring project, separate from my VirtualBox lab and Ubuntu WSL 2 assessment.
 
 ## Project work
 
 - Configured Pi-hole on my Raspberry Pi 400.
 - Investigated local DNS resolution and VPN-dependent lookup behavior.
 - Documented DNS-query observations, HTTPS recovery, and unresolved causes.
+- Verified Docker Engine 29.9.3 and Docker Compose v5.7.1 on the Pi. Deployed Uptime Kuma with three checks for the home router, internet reachability and Pi-hole DNS resolution; all were Up in the observed monitoring snapshot.
+- Validated a Uptime Kuma data backup (gzip integrity, expected SQLite/config entries and matching checksum after transfer to Windows), then switched to the `2-slim` Docker image and removed the larger image. Available storage increased from roughly 6.3 GB to 8.1 GB.
+- Deployed the Beszel hub and registered the Pi as a system. **Agent installation and metric reporting remain unfinished**; I have not represented the hub alone as operational host monitoring.
 
 ## Skills
 
-Raspberry Pi, Linux, DNS, TLS certificate troubleshooting and technical documentation.
+Raspberry Pi, Linux, DNS, TLS certificate troubleshooting, Docker Engine/Compose, containerized service monitoring, backup-integrity verification, capacity management and technical documentation.
 
 ## Logical DNS flow
 
@@ -41,6 +44,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Windows 11 / WSL2 DNS behavior with Bitdefender VPN and Pi-hole — November 15, 2026](case-studies/wsl2-bitdefender-pihole-dns-2026-11-15.md): controlled VPN-state comparison using Windows DNS over TCP, standard lookups, WSL2 unique-hostname probes and Pi-hole query-log evidence. VPN-state effects observed; exact DNS redirection/filtering mechanism unverified.
 
+- **[Docker, Uptime Kuma and Beszel monitoring — November 15, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, the three Uptime Kuma checks, a checked and transferred backup, a storage-conscious slim-image migration, and a running Beszel hub. The Beszel agent and post-migration monitor verification remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
+
 ## Evidence collection
 
 - [DNS investigation evidence worksheet](docs/dns-investigation-evidence-checklist.md): a blank template for recording test times, observations and results.
@@ -52,6 +57,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 - [x] Add case studies with command results and dated observations.
 - [ ] Collect matched per-client DNS measurements for the TV follow-up.
 - [x] Record troubleshooting lessons and unresolved questions.
+- [x] Document tonight's Docker installation, Uptime Kuma availability checks, backup integrity and image-size optimization as an existing-host extension.
+- [ ] Verify Uptime Kuma checks again after the slim-image migration; separately deploy and validate the Beszel agent and its actual host metrics without publishing credentials.
 
 The case studies contain my recorded results. The November 11 Pi-hole component versions are documented; matched TV query measurements remain unfinished.
 
