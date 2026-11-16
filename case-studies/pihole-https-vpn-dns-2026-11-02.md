@@ -90,15 +90,17 @@ Browser secure DNS, Windows DNS and VPN DNS can follow different paths. A workin
 
 ### DNS checks
 
+**Public IP-address convention:** `<PIHOLE_LAN_IP>` replaces the private home-network address used in the original observations. Commands below are sanitized examples; substitute the applicable Pi-hole address when repeating the tests.
+
 | Source and query | Observed result | Evidence boundary |
 | --- | --- | --- |
 | Raspberry Pi: `dig @127.0.0.1 example.com A` at 12:54:25 PST | `NOERROR`; two A records; `EDE: 3 (Stale Answer)`; TTL 0; 3 ms | Demonstrates a stale response served by the local resolver; does not identify upstream cause |
 | Raspberry Pi: same query at 12:55:43 PST | `NOERROR`; same two A records; TTL 118; no stale-answer EDE; 0 ms | Consistent with cache refresh; upstream transaction not captured |
-| Raspberry Pi: `nslookup example.com 192.168.0.116` | Two IPv4 and two IPv6 answers | Confirms resolution via the Pi's LAN IPv4 address **from the Pi itself**, not from Windows |
+| Raspberry Pi: `nslookup example.com <PIHOLE_LAN_IP>` | Two IPv4 and two IPv6 answers | Confirms resolution via the Pi's LAN IPv4 address **from the Pi itself**, not from Windows |
 
 ### Windows client: A–B–A VPN-state test
 
-With the Windows laptop querying the Pi-hole server explicitly using `nslookup example.com 192.168.0.116`:
+With the Windows laptop querying the Pi-hole server explicitly using `nslookup example.com <PIHOLE_LAN_IP>`:
 
 | Sequence | Bitdefender VPN state | Observed result |
 | --- | --- | --- |
