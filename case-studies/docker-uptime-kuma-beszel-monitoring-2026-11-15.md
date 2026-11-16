@@ -1,7 +1,7 @@
 # Case Study: Adding Docker-Based Monitoring to My Pi-hole Raspberry Pi
 
-**Date:** November 15, 2026 (Pacific time)  
-**Status:** Docker and Uptime Kuma running; Beszel hub running, **agent collection not yet operational**  
+**Dates:** November 15–16, 2026 (Pacific time)  
+**Status as of November 16:** Pi-hole forwarding to Unbound confirmed; Uptime Kuma slim image deployed; Beszel Hub and Agent connected with live CPU and Docker CPU metrics. Extended history and some sensor readings remain to be checked.  
 **Project:** Existing Raspberry Pi 400 home-DNS server, not a new lab or a production SOC environment
 
 ## Objective and constraints
@@ -10,7 +10,7 @@ I extended my existing Raspberry Pi 400 DNS server with containerized monitoring
 
 I also needed to account for the Pi's limited microSD storage and protect the Uptime Kuma monitoring configuration before switching Docker images.
 
-**Scope:** This report records what I actually configured, observed, and verified on November 15. It does not claim a long-term uptime history, an attack detection, or a functioning Beszel agent where one has not been verified.
+**Scope:** This report records my November 15 baseline and November 16 Agent follow-up separately. It does not claim a long-term uptime history, an attack detection, or metrics not visible in the evidence.
 
 ## Existing host and DNS services
 
@@ -28,6 +28,20 @@ I also needed to account for the Pi's limited microSD storage and protect the Up
 | Docker Compose | Version `v5.7.1`, verified installed |
 
 I kept Pi-hole/Unbound separate from the new containers. After the Uptime Kuma image change, a Pi-hole status check and a local `dig @127.0.0.1 example.com` test succeeded. Those results establish a working local DNS response at the time of the test, **not** universal DNS reachability from every client or proof of uninterrupted service throughout the maintenance window.
+
+## Pi-hole to Unbound forwarding verification — November 15
+
+I separately installed and configured Unbound to listen only on `127.0.0.1:5335` for TCP and UDP. I preserved Debian's root trust-anchor configuration, validated it with `sudo unbound-checkconf`, and kept the `unbound-resolvconf.service` integration disabled.
+
+My direct resolver tests returned `NOERROR` and the `ad` flag for `dnssec.works`, and `SERVFAIL` for the intentionally invalid `fail01.dnssec.works` domain. The invalid-domain test had an initial timeout before the final SERVFAIL response.
+
+Pi-hole initially reported Quad9 upstream servers (`9.9.9.9` and `149.112.112.112`). I changed `dns.upstreams` to the local Unbound service and re-read the setting as `[ 127.0.0.1#5335 ]`. A subsequent `dig @127.0.0.1 en.wikipedia.org A` succeeded; Pi-hole's log explicitly recorded:
+
+```text
+forwarded en.wikipedia.org to 127.0.0.1#5335
+```
+
+This verifies that the particular request was forwarded to Unbound. It does not prove every household client uses this resolver or that DNS is continuously available.
 
 ## Uptime Kuma deployment and monitoring
 
@@ -67,7 +81,7 @@ The initial Uptime Kuma image, `louislam/uptime-kuma:2`, was observed at approxi
 
 The space recovery is consistent with the image replacement and old-image removal. These readings are the observed measurements, not a controlled storage benchmark. The container was started following migration, but I am **not** claiming a fresh, captured A/B/A monitor-availability test after that change.
 
-## Beszel host-monitoring extension — partial completion
+## Beszel host-monitoring extension — November 15 baseline
 
 I also deployed the Beszel **Hub** container, based on `henrygd/beszel:latest`, with the interface bound to the Pi's LAN address at TCP port `8090`.
 
@@ -77,9 +91,21 @@ I also deployed the Beszel **Hub** container, based on `henrygd/beszel:latest`, 
 - The dashboard initially displayed no systems. Subsequently, the registered `home-dns` system was **Down/pending**.
 - A container inventory showed **only the `beszel` hub container**: the **Beszel agent was not installed or running** in the verified session.
 
-**Open issue:** Beszel cannot report host CPU, memory, disk or other system metrics until the agent is actually deployed, configured and shown connected. The agent's required `KEY` / `TOKEN` values were not supplied in the verified work. Any later credentials must remain in private configuration and must **never** be committed to this repository.
+**November 15 open issue (resolved November 16):** At this point the Hub alone could not report host metrics. The Agent was not yet operational. See the dated follow-up below. Agent credentials must remain in private configuration, never in Git.
 
 The successful hub deployment is therefore **not** proof of end-to-end Beszel monitoring.
+
+## November 16 follow-up — Beszel Agent connection verified
+
+I extended the existing Beszel Compose deployment with an Agent container and a local Unix socket shared with the Hub. The Hub's mount list confirmed `/beszel_data` and `/beszel_socket`, and the registered system used `beszel.sock` as its connection.
+
+The Agent initially entered a restart loop with exit code 1. Its logs specifically reported `Failed to parse key: YOUR_BESZEL_PUBLIC_KEY`. I traced that failure to a placeholder instead of the real Beszel-generated public key. A second validation failure arose because the public key appeared as a bare first line in `.env`, not in the `BESZEL_KEY='...'` assignment expected by Docker Compose.
+
+I corrected the private environment-file structure, kept the file permission at `600`, and successfully ran `sudo docker compose config --quiet`. I then recreated only the Agent with `sudo docker compose up -d --no-deps --force-recreate beszel-agent`. The next `docker compose ps` output showed both `beszel` and `beszel-agent` **Up**, with the Agent still up at a subsequent three-minute check.
+
+A later Beszel dashboard screenshot showed the `home-dns` system **Up** using `beszel.sock`, with Debian GNU/Linux 13 (Trixie), Cortex-A72, approximately 3.71 GB RAM and 34 days host uptime. Live CPU and Docker CPU graphs had begun to populate: system CPU briefly spiked to approximately 29% in the small sample and then fell near idle; the visible Docker CPU plot remained near zero.
+
+**Verified:** Agent process stability over the observed interval, successful Hub-to-Agent connection, reported system metadata, and initial CPU metrics. **Not yet verified from the provided cropped screenshot:** complete memory, disk, temperature and network metric graphs, alert delivery, long-term retention, or the three Uptime Kuma monitors in a new post-slim dashboard capture. I did not publish the real Agent key, token, private `.env` file, or raw configuration.
 
 ## Verification boundaries and next checks
 
@@ -106,6 +132,6 @@ These are foundational skills for understanding the availability and health of i
 
 ## Evidence and privacy
 
-This report is transcribed from the November 15 command outputs and dashboard observations. No fresh evidence images, Docker Compose file, monitoring database, secrets or raw host logs are published with this case study. LAN addresses are represented by placeholders. Commands and configurations not independently captured should not be treated as fully reproducible deployment artifacts.
+This report is transcribed from the November 15–16 command outputs and dashboard observations. No fresh evidence images, Docker Compose file, monitoring database, secrets or raw host logs are published with this case study. LAN addresses are represented by placeholders. Commands and configurations not independently captured should not be treated as fully reproducible deployment artifacts.
 
 *Documentation note: I used writing assistance to organize this report from the commands, results and screenshots I reviewed during my investigation. I distinguish observed results from interpretations and unfinished tests; writing assistance is not evidence of a technical result.*
