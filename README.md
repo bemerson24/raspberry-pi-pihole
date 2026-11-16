@@ -46,7 +46,7 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Windows 11 / WSL2 DNS behavior with Bitdefender VPN and Pi-hole — November 15, 2026](case-studies/wsl2-bitdefender-pihole-dns-2026-11-15.md): controlled VPN-state comparison using Windows DNS over TCP, standard lookups, WSL2 unique-hostname probes and Pi-hole query-log evidence. VPN-state effects observed; exact DNS redirection/filtering mechanism unverified.
 
-- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A post-migration screenshot of all three Uptime Kuma monitors and additional Beszel charts remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
+- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A November 16 post-migration dashboard screenshot verified all three original monitors Up, plus the Uptime Kuma self-check; additional Beszel hardware charts and publishing sanitized dashboard evidence remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
 
 ## Evidence collection
 
@@ -61,7 +61,8 @@ Other household clients and potential alternate DNS paths are not inventoried in
 - [x] Record troubleshooting lessons and unresolved questions.
 - [x] Document tonight's Docker installation, Uptime Kuma availability checks, backup integrity and image-size optimization as an existing-host extension.
 - [x] Deploy the Beszel Agent and verify Hub connectivity with live CPU and Docker CPU metrics, keeping credentials private.
-- [ ] Recheck all three Uptime Kuma monitors after the slim-image migration, inspect the remaining Beszel temperature/memory/disk/network charts and consider sanitized evidence for publication.
+- [x] Recheck the original three Uptime Kuma monitors after the slim-image migration (all Up in November 16 dashboard, alongside Uptime Kuma self-check).
+- [ ] Inspect remaining Beszel temperature/memory/disk/network charts and consider sanitized evidence for publication.
 
 The case studies contain my recorded results. The November 11 Pi-hole component versions are documented; matched TV query measurements remain unfinished.
 
