@@ -16,7 +16,7 @@ I deployed Pi-hole on a Raspberry Pi 400 and investigated DNS-query patterns, VP
 - Configured Unbound as Pi-hole's sole upstream at `127.0.0.1#5335`; tested DNSSEC's valid/invalid responses and captured Pi-hole's actual `en.wikipedia.org` forwarding log.
 - Verified Docker Engine 29.9.3 and Docker Compose v5.7.1 on the Pi. Deployed Uptime Kuma with three checks for the home router, internet reachability and Pi-hole DNS resolution; all were Up in the observed monitoring snapshot.
 - Validated a Uptime Kuma data backup (gzip integrity, expected SQLite/config entries and matching checksum after transfer to Windows), then switched to the `2-slim` Docker image and removed the larger image. Available storage increased from roughly 6.3 GB to 8.1 GB.
-- Deployed the Beszel Hub and Agent in Docker, verified both containers running and the `home-dns` system Up, and observed the first system CPU and Docker CPU graphs. I corrected a public-key placeholder and malformed `.env` entry before the Agent connected. Other hardware sensor charts and extended history remain to be verified.
+- Deployed the Beszel Hub and Agent in Docker and verified `home-dns` Up with populated **host CPU and memory** charts. I corrected a public-key placeholder and malformed `.env` entry before the Agent connected. Docker CPU/memory charts appeared flat at zero in a later screenshot and require independent validation; disk, network and temperature panels remain to be checked.
 
 ## Skills
 
@@ -46,7 +46,7 @@ Other household clients and potential alternate DNS paths are not inventoried in
 
 - [Windows 11 / WSL2 DNS behavior with Bitdefender VPN and Pi-hole — November 15, 2026](case-studies/wsl2-bitdefender-pihole-dns-2026-11-15.md): controlled VPN-state comparison using Windows DNS over TCP, standard lookups, WSL2 unique-hostname probes and Pi-hole query-log evidence. VPN-state effects observed; exact DNS redirection/filtering mechanism unverified.
 
-- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A November 16 post-migration dashboard screenshot verified all three original monitors Up, plus the Uptime Kuma self-check; additional Beszel hardware charts and publishing sanitized dashboard evidence remain pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
+- **[Docker, Uptime Kuma and Beszel monitoring — November 15–16, 2026](case-studies/docker-uptime-kuma-beszel-monitoring-2026-11-15.md):** verified Docker/Compose, three Uptime Kuma availability checks, a hash-checked backup and slim-image migration, Unbound forwarding, and a functioning Beszel Hub/Agent connection with initial CPU metrics. A November 16 post-migration dashboard screenshot verified all three original monitors Up, plus the Uptime Kuma self-check; Beszel host CPU and memory graphs were also verified; per-container resource metrics, remaining hardware panels and publishing sanitized dashboard evidence are pending. This is an **extension of my existing Pi-hole host**, not a completed SOC detection project.
 
 ## Evidence collection
 
@@ -60,9 +60,9 @@ Other household clients and potential alternate DNS paths are not inventoried in
 - [ ] Collect matched per-client DNS measurements for the TV follow-up.
 - [x] Record troubleshooting lessons and unresolved questions.
 - [x] Document tonight's Docker installation, Uptime Kuma availability checks, backup integrity and image-size optimization as an existing-host extension.
-- [x] Deploy the Beszel Agent and verify Hub connectivity with live CPU and Docker CPU metrics, keeping credentials private.
+- [x] Deploy the Beszel Agent and verify Hub connectivity with populated host CPU and memory metrics, keeping credentials private.
 - [x] Recheck the original three Uptime Kuma monitors after the slim-image migration (all Up in November 16 dashboard, alongside Uptime Kuma self-check).
-- [ ] Inspect remaining Beszel temperature/memory/disk/network charts and consider sanitized evidence for publication.
+- [ ] Inspect Beszel disk/network/temperature charts and independently validate the flat Docker CPU/memory panels; publish only sanitized evidence.
 
 The case studies contain my recorded results. The November 11 Pi-hole component versions are documented; matched TV query measurements remain unfinished.
 
